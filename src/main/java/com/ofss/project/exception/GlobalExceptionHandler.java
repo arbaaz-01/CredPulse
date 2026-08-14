@@ -1,0 +1,161 @@
+package com.ofss.project.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleEmailExists(
+            EmailAlreadyExistsException ex) {
+
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "EMAIL_ALREADY_EXISTS");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
+
+    @ExceptionHandler(MobileAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleMobileExists(
+            MobileAlreadyExistsException ex) {
+
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "MOBILE_ALREADY_EXISTS");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
+    
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidCredentials(
+            InvalidCredentialsException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "INVALID_CREDENTIALS");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidation(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(error ->
+                        errors.put(error.getField(), error.getDefaultMessage())
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errors);
+    }
+    
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidRefreshToken(
+            InvalidRefreshTokenException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "INVALID_REFRESH_TOKEN");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(response);
+    }
+    
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotFound(
+            UserNotFoundException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "USER_NOT_FOUND");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+    
+    @ExceptionHandler(CardAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>>
+    handleCardAlreadyExists(
+            CardAlreadyExistsException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "CARD_ALREADY_EXISTS");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
+    
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<Map<String, String>>
+    handleCardNotFound(
+            CardNotFoundException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "CARD_NOT_FOUND");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+
+    @ExceptionHandler(InvalidCardStatusException.class)
+    public ResponseEntity<Map<String, String>>
+    handleInvalidCardStatus(
+            InvalidCardStatusException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "INVALID_CARD_STATUS");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(response);
+    }
+    
+    @ExceptionHandler(InvalidCardNumberException.class)
+    public ResponseEntity<Map<String, String>>
+    handleInvalidCardNumber(
+            InvalidCardNumberException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "INVALID_CARD_NUMBER");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(response);
+    }
+
+
+}

@@ -1,21 +1,21 @@
 package com.ofss.project.security;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CurrentUser {
 
-    public Long getUserId(Authentication authentication) {
+	public Long getUserId() {
 
-        if (authentication == null ||
-                !authentication.isAuthenticated()) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            throw new IllegalStateException(
-                    "User is not authenticated"
-            );
-        }
+		if (authentication == null || !authentication.isAuthenticated()) {
 
-        return Long.valueOf(authentication.getName());
-    }
+			throw new IllegalStateException("User is not authenticated");
+		}
+
+		return Long.valueOf(authentication.getName());
+	}
 }

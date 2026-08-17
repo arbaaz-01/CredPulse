@@ -156,6 +156,19 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(response);
     }
+    
+    @ExceptionHandler(InvalidStaffRoleException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidStaffRole(
+            InvalidStaffRoleException ex) {
 
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "INVALID_STAFF_ROLE");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(response);
+    }
 
 }

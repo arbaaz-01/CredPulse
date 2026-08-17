@@ -21,7 +21,7 @@ public class UserService {
     public UserResponse getCurrentUser(
             Authentication authentication) {
 
-        Long userId = currentUser.getUserId(authentication);
+        Long userId = currentUser.getUserId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->

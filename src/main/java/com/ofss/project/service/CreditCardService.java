@@ -42,7 +42,7 @@ public class CreditCardService {
             AddCardRequest request) {
 
         Long userId =
-                currentUser.getUserId(authentication);
+                currentUser.getUserId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
@@ -106,7 +106,7 @@ public class CreditCardService {
             Authentication authentication) {
 
         Long userId =
-                currentUser.getUserId(authentication);
+                currentUser.getUserId();
 
         return creditCardRepository
                 .findAllByUserIdAndStatusNot(
@@ -125,7 +125,7 @@ public class CreditCardService {
             Long cardId) {
 
         Long userId =
-                currentUser.getUserId(authentication);
+                currentUser.getUserId();
 
         CreditCard card =
                 creditCardRepository
@@ -156,7 +156,7 @@ public class CreditCardService {
             UpdateCardStatusRequest request) {
 
         Long userId =
-                currentUser.getUserId(authentication);
+                currentUser.getUserId();
 
         CreditCard card =
                 creditCardRepository
@@ -198,7 +198,7 @@ public class CreditCardService {
             Long cardId) {
 
         Long userId =
-                currentUser.getUserId(authentication);
+                currentUser.getUserId();
 
         CreditCard card =
                 creditCardRepository

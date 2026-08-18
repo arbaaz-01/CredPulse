@@ -170,5 +170,50 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(response);
     }
+    
+    @ExceptionHandler(DocumentNotFoundException.class)
+    public ResponseEntity<Map<String, String>>
+    handleDocumentNotFound(
+            DocumentNotFoundException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "DOCUMENT_NOT_FOUND");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+    
+    @ExceptionHandler(DocumentAccessDeniedException.class)
+    public ResponseEntity<Map<String, String>>
+    handleDocumentAccessDenied(
+            DocumentAccessDeniedException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "DOCUMENT_ACCESS_DENIED");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(response);
+    }
+    
+    @ExceptionHandler(DocumentStorageException.class)
+    public ResponseEntity<Map<String, String>>
+    handleDocumentStorage(
+            DocumentStorageException ex) {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("error", "DOCUMENT_STORAGE_ERROR");
+        response.put("message", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
 
 }

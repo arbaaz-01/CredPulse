@@ -12,10 +12,12 @@ import com.ofss.project.entity.ApplicationStatusHistory;
 import com.ofss.project.entity.CreditCardApplication;
 import com.ofss.project.entity.CreditCardProduct;
 import com.ofss.project.entity.User;
+import com.ofss.project.enums.ApplicationDocumentType;
 import com.ofss.project.enums.ApplicationStatus;
 import com.ofss.project.enums.CreditCardProductStatus;
 import com.ofss.project.enums.EmploymentType;
 import com.ofss.project.exception.UserNotFoundException;
+import com.ofss.project.repository.ApplicationDocumentRepository;
 import com.ofss.project.repository.ApplicationStatusHistoryRepository;
 import com.ofss.project.repository.CreditCardApplicationRepository;
 import com.ofss.project.repository.CreditCardProductRepository;
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class CreditCardApplicationService {
 
     private final CreditCardApplicationRepository applicationRepository;
+    private final ApplicationDocumentRepository documentRepository;
     private final CreditCardProductRepository productRepository;
     private final ApplicationStatusHistoryRepository historyRepository;
     private final UserRepository userRepository;
@@ -279,6 +282,8 @@ public class CreditCardApplicationService {
     private void validateApplicationForSubmission(
             CreditCardApplication application) {
 
+        validateRequiredDocuments(application.getId());
+    	
         if (application.getDateOfBirth() == null) {
             throw new IllegalStateException(
                     "Date of birth is required"
@@ -476,5 +481,42 @@ public class CreditCardApplicationService {
                 application.getCreatedAt(),
                 application.getUpdatedAt()
         );
+    }
+    
+    private void validateRequiredDocuments(
+            Long applicationId) {
+
+        if (!documentRepository
+                .existsByApplication_IdAndDocumentType(
+                        applicationId,
+                        ApplicationDocumentType.AADHAAR
+                )) {
+
+            throw new IllegalStateException(
+                    "Aadhaar document is required"
+            );
+        }
+
+        if (!documentRepository
+                .existsByApplication_IdAndDocumentType(
+                        applicationId,
+                        ApplicationDocumentType.PAN
+                )) {
+
+            throw new IllegalStateException(
+                    "PAN document is required"
+            );
+        }
+
+        if (!documentRepository
+                .existsByApplication_IdAndDocumentType(
+                        applicationId,
+                        ApplicationDocumentType.EMPLOYMENT_PROOF
+                )) {
+
+            throw new IllegalStateException(
+                    "Employment proof document is required"
+            );
+        }
     }
 }

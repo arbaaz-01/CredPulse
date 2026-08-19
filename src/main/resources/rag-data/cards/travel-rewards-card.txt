@@ -1,0 +1,6 @@
+Card name: Travel Rewards Card
+Product code: CC_TRAVEL_005
+Catalog fields: minimum income 750000; annual fee 1999; interest rate 31.5%; credit limit range 100000 to 500000.
+Training benefits: 5 fictional reward points per 100 on eligible travel, 1 point elsewhere, and two fictional lounge visits annually. Dining, shopping, and fuel have no enhanced rate.
+Best suited for: frequent travellers. Not suited for: customers whose main expense is fuel. Advantage: travel-focused rewards. Drawback: weak non-travel returns.
+Example: 20000 eligible travel spend earns 1000 fictional points. Responsible use: check affordability first. This is fictional training data.

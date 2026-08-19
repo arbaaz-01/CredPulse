@@ -1,0 +1,6 @@
+Card name: Student Credit Card
+Product code: CC_STUDENT_011
+Catalog fields: minimum income 150000; annual fee 0; interest rate 39%; credit limit range 10000 to 50000.
+Training benefits: 1% fictional cashback on eligible purchases capped at 200 monthly and 1 reward point per 100. No travel, fuel, lounge, or premium category benefit.
+Best suited for: students and first-time credit users. Not suited for: high-limit needs. Advantage: no annual fee. Drawback: low limit and high interest rate.
+Example: 5000 eligible spend earns 50 fictional cashback. Responsible use: build habits by paying every statement in full. This is fictional training data.

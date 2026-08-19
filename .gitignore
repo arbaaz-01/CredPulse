@@ -42,6 +42,7 @@ target/
 .project
 .settings/
 .factorypath
+bin/
 
 # Spring Boot
 *.log

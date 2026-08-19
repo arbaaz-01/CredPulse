@@ -1,0 +1,6 @@
+Card name: Platinum Credit Card
+Product code: CC_PLATINUM_004
+Catalog fields: minimum income 1000000; annual fee 2499; interest rate 30.5%; credit limit range 150000 to 750000.
+Training benefits: 3 reward points per 100 on general purchases, 5 per 100 on eligible travel, and two fictional lounge visits annually. Dining and shopping earn general points; fuel earns 0.5% fictional value.
+Best suited for: higher-income mixed-spend travellers. Not suited for: low-fee users. Advantage: stronger travel rewards. Drawback: annual fee.
+Example: 10000 eligible travel spend earns 500 fictional points. Responsible use: pay on time. This is fictional training data.

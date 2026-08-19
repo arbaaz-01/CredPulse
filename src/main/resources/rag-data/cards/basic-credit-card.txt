@@ -1,0 +1,6 @@
+Card name: Basic Credit Card
+Product code: CC_BASIC_001
+Catalog fields: minimum income 250000; annual fee 499; interest rate 36%; credit limit range 25000 to 100000.
+Training benefits: simple 1% fictional cashback on eligible everyday purchases and basic purchase tracking. No lounge, travel, dining, shopping, or fuel multiplier.
+Best suited for: customers wanting a straightforward entry card. Not suited for: specialised travel or high-category rewards. Advantage: simple low-fee proposition. Drawback: limited perks.
+Example: 10000 eligible everyday spend earns 100 fictional cashback. Responsible use: pay statements on time. This is fictional training data.

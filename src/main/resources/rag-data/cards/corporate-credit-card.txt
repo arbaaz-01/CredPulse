@@ -1,0 +1,6 @@
+Card name: Corporate Credit Card
+Product code: CC_CORPORATE_010
+Catalog fields: minimum income 1200000; annual fee 2999; interest rate 29.5%; credit limit range 200000 to 1000000.
+Training benefits: fictional expense-management summaries, 2 reward points per 100 on business travel and general spend, and four fictional lounge visits annually. No personal fuel or dining multiplier.
+Best suited for: eligible business-related expense profiles. Not suited for: basic personal spending. Advantage: higher limit and travel support. Drawback: high income threshold.
+Example: 50000 eligible business travel spend earns 1000 fictional points. Responsible use: follow employer expense policy. This is fictional training data.

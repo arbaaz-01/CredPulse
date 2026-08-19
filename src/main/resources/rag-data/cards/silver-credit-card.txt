@@ -1,0 +1,6 @@
+Card name: Silver Credit Card
+Product code: CC_SILVER_002
+Catalog fields: minimum income 400000; annual fee 999; interest rate 34.5%; credit limit range 50000 to 200000.
+Training benefits: 1.25% fictional cashback on eligible general spending and 2 reward points per 100 on dining. Travel, shopping, fuel, and lounges have no special multiplier.
+Best suited for: balanced everyday spending. Not suited for: users seeking premium travel benefits. Advantage: broader everyday value. Drawback: modest category returns.
+Example: 10000 eligible spend earns 125 fictional cashback. Responsible use: repay balances in full. This is fictional training data.

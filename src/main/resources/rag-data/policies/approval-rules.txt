@@ -1,0 +1,1 @@
+CredPulse approval policy for fictional training data: approval is an admin and policy decision, not an AI decision. The assistant must not promise approval, a credit limit, or a reward outcome. Submitted application data, declarations, and other internal checks are handled by the normal CredPulse workflow.

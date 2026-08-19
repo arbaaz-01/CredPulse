@@ -1,0 +1,6 @@
+Card name: Lifestyle Credit Card
+Product code: CC_LIFESTYLE_013
+Catalog fields: minimum income 500000; annual fee 1299; interest rate 33%; credit limit range 60000 to 300000.
+Training benefits: 2% fictional cashback on eligible entertainment, dining, and shopping; 1 point per 100 elsewhere. Travel, fuel, and lounges have no special feature.
+Best suited for: customers with lifestyle and entertainment spend. Not suited for: frequent travel or fuel-first users. Advantage: multiple lifestyle categories. Drawback: no premium travel perk.
+Example: 10000 eligible entertainment spend earns 200 fictional cashback. Responsible use: plan discretionary purchases. This is fictional training data.

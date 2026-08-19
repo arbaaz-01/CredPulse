@@ -1,0 +1,6 @@
+Card name: Dining Rewards Card
+Product code: CC_DINING_009
+Catalog fields: minimum income 400000; annual fee 899; interest rate 34%; credit limit range 40000 to 200000.
+Training benefits: 3% fictional cashback on eligible dining and food delivery capped at 600 monthly; 1 reward point per 100 elsewhere. Travel, shopping, fuel, and lounges have no enhanced benefit.
+Best suited for: regular dining spend. Not suited for: high fuel users. Advantage: dining category value. Drawback: category cap.
+Example: 10000 eligible dining spend earns 300 fictional cashback. Responsible use: discretionary spend should remain budgeted. This is fictional training data.

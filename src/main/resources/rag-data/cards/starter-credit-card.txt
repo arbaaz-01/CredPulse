@@ -1,0 +1,6 @@
+Card name: Starter Credit Card
+Product code: CC_STARTER_015
+Catalog fields: minimum income 200000; annual fee 299; interest rate 37.5%; credit limit range 15000 to 75000.
+Training benefits: 0.75% fictional cashback on eligible general purchases and 1 reward point per 100. No travel, lounge, dining, shopping, or fuel multiplier.
+Best suited for: entry-level customers establishing responsible credit use. Not suited for: premium rewards or large limits. Advantage: low annual fee. Drawback: limited benefits.
+Example: 10000 eligible spend earns 75 fictional cashback. Responsible use: repay on time and keep usage manageable. This is fictional training data.

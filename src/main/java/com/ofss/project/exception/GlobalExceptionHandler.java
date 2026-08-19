@@ -6,11 +6,22 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ofss.project.rag.RagUnavailableException;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(RagUnavailableException.class)
+    public ResponseEntity<Map<String, String>> handleRagUnavailable(
+            RagUnavailableException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "RAG_UNAVAILABLE");
+        response.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
+    }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleEmailExists(

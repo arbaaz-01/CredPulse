@@ -1,0 +1,6 @@
+Card name: Gold Credit Card
+Product code: CC_GOLD_003
+Catalog fields: minimum income 600000; annual fee 1499; interest rate 32%; credit limit range 75000 to 350000.
+Training benefits: 2% fictional cashback on eligible dining and shopping, 2 reward points per 100 elsewhere, and one fictional domestic lounge visit annually. Fuel earns no special rate.
+Best suited for: customers with regular dining and shopping spend. Not suited for: fuel-first profiles. Advantage: balanced category rewards. Drawback: limited lounge access.
+Example: 10000 eligible shopping spend earns 200 fictional cashback. Responsible use: rewards do not justify extra spending. This is fictional training data.

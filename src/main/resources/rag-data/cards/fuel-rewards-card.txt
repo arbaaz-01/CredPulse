@@ -1,0 +1,6 @@
+Card name: Fuel Rewards Card
+Product code: CC_FUEL_006
+Catalog fields: minimum income 300000; annual fee 799; interest rate 35%; credit limit range 30000 to 150000.
+Training benefits: 4% fictional cashback on eligible fuel spending capped at 500 per month; 1 reward point per 100 elsewhere. No lounge or travel multiplier.
+Best suited for: regular commuters with high fuel spend. Not suited for: travel reward seekers. Advantage: focused fuel value. Drawback: cashback cap.
+Example: 10000 eligible fuel spend earns 400 fictional cashback. Responsible use: never spend extra for rewards. This is fictional training data.

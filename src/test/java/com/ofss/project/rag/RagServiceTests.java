@@ -68,7 +68,8 @@ class RagServiceTests {
         RagChatResponse response = service.chat(new RagChatRequest("Which card is best for me?",
                 null, null, null, null, null, null, null));
 
-        assertTrue(response.answer().contains("Please provide monthly income"));
+        assertTrue(response.answer().toLowerCase().contains("monthly income"));
+        assertTrue(response.answer().toLowerCase().contains("monthly expense"));
     }
 
     @Test
@@ -130,12 +131,22 @@ class RagServiceTests {
 
         RagService service = service(vectorStore, chatClientBuilder, List.of(student, starter));
         RagChatResponse response = service.chat(new RagChatRequest(
-                "I earn 200000 per month and spend around 50000. Which card is suitable for me?",
-                BigDecimal.valueOf(200000), BigDecimal.valueOf(50000), null, null, null, null, null));
+        "I earn 200000 per month, spend around 50000, "
+                + "and most of my spending is on shopping. "
+                + "Which card is suitable for me?",
+        BigDecimal.valueOf(200000),
+        BigDecimal.valueOf(50000),
+        null,
+        BigDecimal.valueOf(30000),
+        null,
+        null,
+        "shopping"));
 
         assertFalse(response.recommendations().isEmpty());
+
         assertTrue(response.recommendations().stream()
-                .allMatch(recommendation -> recommendation.productCode().equals("CC_STUDENT_011")
+        .allMatch(recommendation ->
+                recommendation.productCode().equals("CC_STUDENT_011")
                         || recommendation.productCode().equals("CC_STARTER_015")));
     }
 

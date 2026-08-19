@@ -1,6 +1,7 @@
 package com.ofss.project.repository;
 
 import com.ofss.project.entity.CreditCardApplication;
+import com.ofss.project.enums.ApplicationStatus;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,10 +14,19 @@ public interface CreditCardApplicationRepository
     List<CreditCardApplication>
     findByUser_IdOrderByCreatedAtDesc(Long userId);
 
-    Optional<CreditCardApplication>
+    Optional<CreditCardApplication>     
     findByIdAndUser_Id(Long id, Long userId);
 
     boolean existsByApplicationNumber(
             String applicationNumber
+    );
+
+     List<CreditCardApplication> findByStatusNot(
+            ApplicationStatus status
+    );
+
+    Optional<CreditCardApplication> findByIdAndStatusNot(
+            Long id,
+            ApplicationStatus status
     );
 }

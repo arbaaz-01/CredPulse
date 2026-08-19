@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -56,6 +57,24 @@ public class CreditCard {
         )
     )
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "APPLICATION_ID",
+            nullable = false,
+            unique = true,
+            foreignKey = @ForeignKey(
+            name = "FK_CREDIT_CARD_APPLICATION"
+        )
+    )
+    private CreditCardApplication application;
+
+    @Column(
+        name = "CARD_NUMBER_ENCRYPTED",
+        nullable = false,
+        length = 512
+    )
+private String cardNumberEncrypted;
 
     @Column(
         name = "CARD_NUMBER_HASH",

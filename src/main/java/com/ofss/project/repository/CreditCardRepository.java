@@ -15,6 +15,8 @@ public interface CreditCardRepository extends JpaRepository<CreditCard, Long> {
 	Optional<CreditCard> findByIdAndUserId(Long id, Long userId);
 
 	boolean existsByUserIdAndCardNumberHash(Long userId, String cardNumberHash);
+
+	boolean existsByApplicationId(Long applicationId);
 	
 	List<CreditCard> findAllByUserIdAndStatusNot(
 	        Long userId,

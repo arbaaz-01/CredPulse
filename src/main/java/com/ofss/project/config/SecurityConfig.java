@@ -122,8 +122,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/manager/**")
                         .hasRole("MANAGER")
 
+                        //User Endpoints
+                        .requestMatchers("/api/v1/cards/**")
+                        .hasRole("USER")
+
                         // Everything else requires authentication
                         .anyRequest().authenticated()
+
+                       
                 )
 
                 .oauth2ResourceServer(oauth2 ->

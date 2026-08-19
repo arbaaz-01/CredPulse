@@ -1,27 +1,24 @@
 package com.ofss.project.service;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.HexFormat;
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ofss.project.dto.request.AddCardRequest;
-import com.ofss.project.dto.request.UpdateCardStatusRequest;
+import com.ofss.project.dto.response.CardIssuanceResponse;
 import com.ofss.project.dto.response.CreditCardResponse;
 import com.ofss.project.entity.CreditCard;
-import com.ofss.project.entity.User;
+import com.ofss.project.entity.CreditCardApplication;
+import com.ofss.project.enums.ApplicationStatus;
 import com.ofss.project.enums.CardStatus;
-import com.ofss.project.exception.CardAlreadyExistsException;
-import com.ofss.project.exception.CardNotFoundException;
-import com.ofss.project.exception.InvalidCardNumberException;
-import com.ofss.project.exception.InvalidCardStatusException;
 import com.ofss.project.repository.CreditCardRepository;
-import com.ofss.project.repository.UserRepository;
-import com.ofss.project.security.CurrentUser;
-import com.ofss.project.util.CardNumberUtil;
-import com.ofss.project.util.HashUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,198 +27,305 @@ import lombok.RequiredArgsConstructor;
 public class CreditCardService {
 
     private final CreditCardRepository creditCardRepository;
-    private final UserRepository userRepository;
-    private final CurrentUser currentUser;
-    private final HashUtil hashUtil;
-    private final CardNumberUtil cardNumberUtil;
+    private final CardEncryptionService cardEncryptionService;
 
+    private final SecureRandom secureRandom =
+            new SecureRandom();
+
+
+    // =========================================================
+    // CARD ISSUANCE
+    // =========================================================
 
     @Transactional
-    public CreditCardResponse addCard(
-            Authentication authentication,
-            AddCardRequest request) {
+    public CardIssuanceResponse issueCard(
+            CreditCardApplication application,
+            BigDecimal approvedLimit
+    ) {
 
-        Long userId =
-                currentUser.getUserId();
+        if (application.getStatus() != ApplicationStatus.APPROVED) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "Authenticated user not found"
-                        )
-                );
-
-        String cardNumber = request.cardNumber().trim();
-        
-        if (!cardNumberUtil.isValid(cardNumber)) {
-            throw new InvalidCardNumberException("Invalid card number");
-        }
-
-        String cardNumberHash =
-                hashUtil.sha256(cardNumber);
-
-        if (creditCardRepository
-                .existsByUserIdAndCardNumberHash(
-                        userId,
-                        cardNumberHash
-                )) {
-
-            throw new CardAlreadyExistsException(
-                    "This card is already added"
+            throw new IllegalStateException(
+                    "Credit card can only be issued for an approved application"
             );
         }
 
+        if (creditCardRepository.existsByApplicationId(
+                application.getId())) {
+
+            throw new IllegalStateException(
+                    "Card already issued for this application"
+            );
+        }
+
+        if (approvedLimit == null ||
+                approvedLimit.compareTo(BigDecimal.ZERO) <= 0) {
+
+            throw new IllegalArgumentException(
+                    "Approved credit limit must be greater than zero"
+            );
+        }
+
+        // Generate card number
+        String cardNumber =
+                generateCardNumber();
+
+        // Encrypt card number for database
+        String encryptedCardNumber =
+                cardEncryptionService.encrypt(cardNumber);
+
+        // Hash card number for uniqueness/checking
+        String cardNumberHash =
+                hashCardNumber(cardNumber);
+
+        // Store last four digits
         String lastFour =
                 cardNumber.substring(
                         cardNumber.length() - 4
                 );
 
-        BigDecimal creditLimit =
-                request.creditLimit();
+        // Generate CVV
+        String cvv =
+                generateCvv();
 
-        CreditCard card = CreditCard.builder()
-                .user(user)
-                .cardNumberHash(cardNumberHash)
-                .cardLastFour(lastFour)
-                .cardHolderName(
-                        request.cardHolderName()
-                                .trim()
-                                .toUpperCase()
-                )
-                .expiryMonth(request.expiryMonth())
-                .expiryYear(request.expiryYear())
-                .creditLimit(creditLimit)
-                .availableLimit(creditLimit)
-                .status(CardStatus.ACTIVE)
-                .build();
+        // Generate expiry
+        LocalDate expiryDate =
+                LocalDate.now().plusYears(5);
 
-        CreditCard saved =
+        CreditCard card =
+                CreditCard.builder()
+                        .user(application.getUser())
+                        .application(application)
+                        .cardNumberEncrypted(
+                                encryptedCardNumber
+                        )
+                        .cardNumberHash(
+                                cardNumberHash
+                        )
+                        .cardLastFour(
+                                lastFour
+                        )
+                        .cardHolderName(
+                                application
+                                        .getUser()
+                                        .getName()
+                        )
+                        .expiryMonth(
+                                expiryDate.getMonthValue()
+                        )
+                        .expiryYear(
+                                expiryDate.getYear()
+                        )
+                        .creditLimit(
+                                approvedLimit
+                        )
+                        .availableLimit(
+                                approvedLimit
+                        )
+                        .status(
+                                CardStatus.ACTIVE
+                        )
+                        .build();
+
+        CreditCard savedCard =
                 creditCardRepository.save(card);
 
-        return CreditCardResponse.from(saved);
+        return new CardIssuanceResponse(
+                savedCard.getId(),
+                maskCardNumber(cardNumber),
+                cvv,
+                savedCard.getExpiryMonth(),
+                savedCard.getExpiryYear(),
+                savedCard.getCreditLimit(),
+                savedCard.getStatus().name()
+        );
     }
 
-    @Transactional(readOnly = true)
-    public List<CreditCardResponse> getMyCards(
-            Authentication authentication) {
 
-        Long userId =
-                currentUser.getUserId();
+    // =========================================================
+    // GET ALL CARDS
+    // =========================================================
 
-        return creditCardRepository
-                .findAllByUserIdAndStatusNot(
-                        userId,
-                        CardStatus.REMOVED
-                )
-                .stream()
-                .map(CreditCardResponse::from)
-                .toList();
+   @Transactional(readOnly = true)
+public List<CreditCardResponse> getUserCards(Long userId) {
 
+    return creditCardRepository
+            .findAllByUserId(userId)
+            .stream()
+            .map(this::toResponse)
+            .toList();
+}
+
+
+
+
+    // =========================================================
+    // GET ONE CARD
+    // =========================================================
+
+   @Transactional(readOnly = true)
+public CreditCardResponse getUserCard(
+        Long cardId,
+        Long userId
+) {
+
+    CreditCard card =
+            creditCardRepository
+                    .findByIdAndUserId(cardId, userId)
+                    .orElseThrow(() ->
+                            new RuntimeException("Card not found")
+                    );
+
+    return toResponse(card);
+}
+
+
+    // =========================================================
+    // CONVERT ENTITY -> RESPONSE
+    // =========================================================
+
+    private CreditCardResponse toResponse(
+            CreditCard card
+    ) {
+
+        String decryptedCardNumber =
+                cardEncryptionService.decrypt(
+                        card.getCardNumberEncrypted()
+                );
+
+        return CreditCardResponse.from(
+                card,
+                decryptedCardNumber
+        );
     }
 
-    @Transactional(readOnly = true)
-    public CreditCardResponse getCard(
-            Authentication authentication,
-            Long cardId) {
 
-        Long userId =
-                currentUser.getUserId();
+    // =========================================================
+    // CARD NUMBER GENERATION
+    // =========================================================
 
-        CreditCard card =
-                creditCardRepository
-                        .findByIdAndUserId(
-                                cardId,
-                                userId
-                        )
-                        .orElseThrow(() ->
-                                new CardNotFoundException(
-                                        "Card not found"
-                                )
-                        );
+    private String generateCardNumber() {
 
-        if (card.getStatus() == CardStatus.REMOVED) {
-            throw new CardNotFoundException(
-                    "Card not found"
-            );
+        StringBuilder number =
+                new StringBuilder(16);
+
+        for (int i = 0; i < 15; i++) {
+
+            int digit =
+                    secureRandom.nextInt(10);
+
+            // First digit between 4 and 9
+            if (i == 0) {
+                digit =
+                        4 + secureRandom.nextInt(6);
+            }
+
+            number.append(digit);
         }
 
-        return CreditCardResponse.from(card);
-    }
+        int checkDigit =
+                calculateLuhnCheckDigit(
+                        number.toString()
+                );
 
-    
-    @Transactional
-    public CreditCardResponse updateCardStatus(
-            Authentication authentication,
-            Long cardId,
-            UpdateCardStatusRequest request) {
+        number.append(checkDigit);
 
-        Long userId =
-                currentUser.getUserId();
-
-        CreditCard card =
-                creditCardRepository
-                        .findByIdAndUserId(
-                                cardId,
-                                userId
-                        )
-                        .orElseThrow(() ->
-                                new CardNotFoundException(
-                                        "Card not found"
-                                )
-                        );
-
-        CardStatus newStatus = request.status();
-
-        if (newStatus == CardStatus.REMOVED) {
-            throw new InvalidCardStatusException(
-                    "Use the remove card operation to remove a card"
-            );
-        }
-
-        if (card.getStatus() == CardStatus.REMOVED) {
-            throw new InvalidCardStatusException(
-                    "Removed card cannot be modified"
-            );
-        }
-
-        card.setStatus(newStatus);
-
-        CreditCard updated =
-                creditCardRepository.save(card);
-
-        return CreditCardResponse.from(updated);
-    }
-    
-    @Transactional
-    public void removeCard(
-            Authentication authentication,
-            Long cardId) {
-
-        Long userId =
-                currentUser.getUserId();
-
-        CreditCard card =
-                creditCardRepository
-                        .findByIdAndUserId(
-                                cardId,
-                                userId
-                        )
-                        .orElseThrow(() ->
-                                new CardNotFoundException(
-                                        "Card not found"
-                                )
-                        );
-
-        if (card.getStatus() == CardStatus.REMOVED) {
-            throw new CardNotFoundException(
-                    "Card not found"
-            );
-        }
-
-        card.setStatus(CardStatus.REMOVED);
-
-        creditCardRepository.save(card);
+        return number.toString();
     }
 
 
+    private int calculateLuhnCheckDigit(
+            String number
+    ) {
+
+        int sum = 0;
+
+        boolean doubleDigit = true;
+
+        for (int i = number.length() - 1;
+             i >= 0;
+             i--) {
+
+            int digit =
+                    number.charAt(i) - '0';
+
+            if (doubleDigit) {
+
+                digit *= 2;
+
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit;
+
+            doubleDigit = !doubleDigit;
+        }
+
+        return (10 - (sum % 10)) % 10;
+    }
+
+
+    // =========================================================
+    // CVV
+    // =========================================================
+
+    private String generateCvv() {
+
+        int cvv =
+                100 + secureRandom.nextInt(900);
+
+        return String.valueOf(cvv);
+    }
+
+
+    // =========================================================
+    // HASH CARD NUMBER
+    // =========================================================
+
+    private String hashCardNumber(
+            String cardNumber
+    ) {
+
+        try {
+
+            MessageDigest digest =
+                    MessageDigest.getInstance(
+                            "SHA-256"
+                    );
+
+            byte[] hash =
+                    digest.digest(
+                            cardNumber.getBytes(
+                                    StandardCharsets.UTF_8
+                            )
+                    );
+
+            return HexFormat.of()
+                    .formatHex(hash);
+
+        } catch (NoSuchAlgorithmException e) {
+
+            throw new IllegalStateException(
+                    "Unable to hash card number",
+                    e
+            );
+        }
+    }
+
+
+    // =========================================================
+    // MASK CARD NUMBER
+    // =========================================================
+
+    private String maskCardNumber(
+            String cardNumber
+    ) {
+
+        return "**** **** **** "
+                + cardNumber.substring(
+                        cardNumber.length() - 4
+                );
+    }
 }

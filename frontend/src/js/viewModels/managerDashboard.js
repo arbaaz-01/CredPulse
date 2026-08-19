@@ -1,0 +1,1 @@
+define(['./staffDashboard'], function (StaffDashboard) { 'use strict'; return function () { return new StaffDashboard('MANAGER', 'Manager workspace', 'Your account is active and ready for credit-card application management.'); }; });

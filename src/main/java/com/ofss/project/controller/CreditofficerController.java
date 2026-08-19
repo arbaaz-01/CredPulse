@@ -1,6 +1,7 @@
 package com.ofss.project.controller;
 
 import com.ofss.project.dto.response.ApplicationRiskResponse;
+import com.ofss.project.dto.response.ApplicationDocumentResponse;
 import com.ofss.project.dto.response.CardIssuanceResponse;
 import com.ofss.project.service.CreditOfficerService;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,15 @@ public class CreditofficerController {
     ) {
         return ResponseEntity.ok(
                 creditOfficerService.getApplicationDetails(id)
+        );
+    }
+
+    @GetMapping("/applications/{id}/documents")
+    public ResponseEntity<List<ApplicationDocumentResponse>> getApplicationDocuments(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(
+                creditOfficerService.getApplicationDocuments(id)
         );
     }
 

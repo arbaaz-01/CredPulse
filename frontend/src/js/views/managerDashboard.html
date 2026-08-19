@@ -1,0 +1,15 @@
+<main class="staff-dashboard-page">
+  <header>
+    <div><span class="staff-kicker">CREDPULSE STAFF PORTAL</span><h1 data-bind="text: title"></h1></div>
+    <button data-bind="click: logout">Logout</button>
+  </header>
+  <section class="staff-dashboard-card">
+    <div class="customer-dashboard-error" role="alert" data-bind="visible: errorMessage, text: errorMessage"></div>
+    <div data-bind="visible: isLoading">Loading workspace&hellip;</div>
+    <div data-bind="visible: !isLoading()">
+      <p class="staff-kicker">SIGNED IN</p><h2 data-bind="text: user() && user().name"></h2><p data-bind="text: description"></p>
+      <dl><div><dt>Email</dt><dd data-bind="text: user() && user().email"></dd></div><div><dt>Role</dt><dd data-bind="text: user() && user().role"></dd></div><div><dt>Account status</dt><dd data-bind="text: user() && user().status"></dd></div></dl>
+      <div class="staff-backend-notice"><strong>Workflow access is pending.</strong><p>The current backend has no Manager APIs or application-review endpoints, so no queue, approval, or decision data is shown here.</p></div>
+    </div>
+  </section>
+</main>

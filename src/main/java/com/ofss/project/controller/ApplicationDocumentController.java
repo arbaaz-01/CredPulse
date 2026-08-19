@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/card-applications")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasAnyRole('USER', 'CREDIT_OFFICER')")
 public class ApplicationDocumentController {
 
 	private final ApplicationDocumentService documentService;

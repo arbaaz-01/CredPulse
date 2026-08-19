@@ -177,5 +177,5 @@ public class ApplicationDocumentService {
                 document.getUploadedAt(),
                 document.getVerifiedAt()
         );
-    }
+    } 
 }

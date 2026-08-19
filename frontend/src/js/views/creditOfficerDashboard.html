@@ -1,0 +1,47 @@
+<main class="staff-dashboard-page credit-officer-page">
+  <header>
+    <div><span class="staff-kicker">CREDPULSE REVIEW DESK</span><h1>Credit Officer workspace</h1></div>
+    <button data-bind="click: logout">Logout</button>
+  </header>
+
+  <section class="credit-officer-content">
+    <div class="customer-dashboard-error" role="alert" data-bind="visible: errorMessage, text: errorMessage"></div>
+    <p class="form-success" role="status" data-bind="visible: successMessage, text: successMessage"></p>
+    <div class="customer-dashboard-loading" data-bind="visible: isLoading"><div class="customer-loading-spinner"></div><span>Loading review workspace…</span></div>
+
+    <div data-bind="visible: !isLoading()">
+      <section class="officer-summary-grid">
+        <article><span>Awaiting decision</span><strong data-bind="text: pendingApplications().length"></strong><p>Submitted requests requiring action</p></article>
+        <article><span>Under review</span><strong data-bind="text: reviewedCount"></strong><p>Requests being assessed</p></article>
+        <article><span>Approved &amp; issued</span><strong data-bind="text: approvedApplications().length"></strong><p>Read-only card issuance history</p></article>
+      </section>
+
+      <section class="officer-workspace">
+        <aside class="officer-queue">
+          <div class="customer-cards-header"><div><p class="customer-panel-eyebrow">DECISION QUEUE</p><h3>Pending applications</h3><p>Review risk and documents before making a decision.</p></div></div>
+          <div class="officer-queue-list" data-bind="foreach: pendingApplications">
+            <button class="officer-queue-item" data-bind="click: $parent.selectApplication, css: { 'is-selected': $parent.selectedApplication() && $parent.selectedApplication().applicationId === applicationId }"><span data-bind="text: applicationNumber"></span><strong data-bind="text: customerName"></strong><small data-bind="text: $parent.formatCurrency(requestedCreditLimit)"></small><em data-bind="text: status"></em></button>
+          </div>
+          <p class="application-documents-empty" data-bind="visible: pendingApplications().length === 0">No applications are waiting for a decision.</p>
+
+          <div class="officer-approved-heading"><p class="customer-panel-eyebrow">ISSUANCE HISTORY</p><h3>Approved requests</h3><p>These records are read-only.</p></div>
+          <div class="officer-approved-list" data-bind="foreach: approvedApplications">
+            <button class="officer-approved-item" data-bind="click: $parent.selectApplication, css: { 'is-selected': $parent.selectedApplication() && $parent.selectedApplication().applicationId === applicationId }"><span data-bind="text: applicationNumber"></span><strong data-bind="text: customerName"></strong><small data-bind="text: 'Approved limit: ' + $parent.formatCurrency(riskAssessment && riskAssessment.recommendedLimit)"></small><em>APPROVED</em></button>
+          </div>
+          <p class="application-documents-empty" data-bind="visible: approvedApplications().length === 0">No card has been issued from this workspace yet.</p>
+        </aside>
+
+        <section class="officer-detail" data-bind="with: selectedApplication">
+          <div class="officer-detail-heading"><div><p class="customer-eyebrow" data-bind="text: status === 'APPROVED' ? 'READ-ONLY ISSUANCE RECORD' : 'RISK REVIEW'"></p><h2 data-bind="text: customerName"></h2><span data-bind="text: applicationNumber"></span></div><span class="application-status" data-bind="text: status"></span></div>
+          <div class="officer-detail-grid"><div><span>Annual income</span><strong data-bind="text: $parent.formatCurrency(annualIncome)"></strong></div><div><span>Monthly expenses</span><strong data-bind="text: $parent.formatCurrency(monthlyExpenses)"></strong></div><div><span>Existing loans</span><strong data-bind="text: $parent.formatCurrency(existingLoanAmount)"></strong></div><div><span>Requested limit</span><strong data-bind="text: $parent.formatCurrency(requestedCreditLimit)"></strong></div><div><span>Risk score</span><strong data-bind="text: $parent.formatRisk(riskAssessment && riskAssessment.riskScore)"></strong></div><div><span>Recommended limit</span><strong data-bind="text: $parent.formatCurrency(riskAssessment && riskAssessment.recommendedLimit)"></strong></div></div>
+          <p class="officer-risk-note" data-bind="text: riskAssessment && riskAssessment.recommendation === 'APPROVE' ? 'Risk assessment recommends approval at the displayed limit.' : 'Risk assessment requires careful review before a decision.'"></p>
+          <section class="officer-documents"><p class="customer-eyebrow">APPLICANT DOCUMENTS</p><div class="document-review-list" data-bind="foreach: $parent.selectedDocuments"><article><div><span class="document-pdf">PDF</span><strong data-bind="text: documentType"></strong><span data-bind="text: originalFileName + ' · ' + displaySize"></span></div><button class="product-action" data-bind="click: $parents[1].openDocument, disable: $parents[1].isOpeningDocument">View document</button></article></div><p class="application-documents-empty" data-bind="visible: $parent.selectedDocuments().length === 0">No documents were uploaded with this application.</p></section>
+          <div class="officer-actions" data-bind="visible: $parent.canDecide($data)"><button class="officer-reject" data-bind="click: $parent.reject, disable: $parent.isProcessing">Reject</button><button class="product-action" data-bind="click: $parent.approve, disable: $parent.isProcessing">Approve &amp; issue card</button></div>
+          <p class="officer-readonly-note" data-bind="visible: status === 'APPROVED'">This application is approved and its card has been issued. Decisions are permanently unavailable for this record.</p>
+        </section>
+
+        <section class="officer-detail officer-detail-empty" data-bind="visible: !selectedApplication()"><h2>Select an application</h2><p>Choose a pending request to decide, or an approved request to review its read-only issuance record.</p></section>
+      </section>
+    </div>
+  </section>
+</main>

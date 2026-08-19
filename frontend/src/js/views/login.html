@@ -1,0 +1,154 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="login-header">
+
+      <h1>CredPulse</h1>
+
+      <p>
+        Welcome back. Sign in to manage your credit cards.
+      </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOGIN FORM
+         ===================================================== -->
+
+    <form
+      data-bind="submit: login"
+      novalidate>
+
+
+      <!-- ===================================================
+           EMAIL
+           =================================================== -->
+
+      <div class="form-group">
+
+        <label for="login-email">
+          Email
+        </label>
+
+        <input
+          id="login-email"
+          type="email"
+          maxlength="150"
+          placeholder="Enter your email"
+          autocomplete="email"
+          required
+          data-bind="
+            value: email,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- ===================================================
+           PASSWORD
+           =================================================== -->
+
+      <div class="form-group">
+
+        <label for="login-password">
+          Password
+        </label>
+
+        <input
+          id="login-password"
+          type="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+          data-bind="
+            value: password,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- ===================================================
+           ERROR MESSAGE
+           =================================================== -->
+
+      <div
+        class="error-message"
+        role="alert"
+        aria-live="polite"
+        data-bind="
+          visible: errorMessage,
+          text: errorMessage
+        ">
+      </div>
+
+
+      <!-- ===================================================
+           SUCCESS MESSAGE
+           =================================================== -->
+
+      <div
+        class="success-message"
+        role="status"
+        aria-live="polite"
+        data-bind="
+          visible: successMessage,
+          text: successMessage
+        ">
+      </div>
+
+
+      <!-- ===================================================
+           LOGIN BUTTON
+           =================================================== -->
+
+      <button
+        type="submit"
+        class="login-button"
+        data-bind="
+          enable: !isLoading()
+        ">
+
+        <span
+          data-bind="visible: !isLoading()">
+          Login
+        </span>
+
+        <span
+          data-bind="visible: isLoading">
+          Logging in...
+        </span>
+
+      </button>
+
+    </form>
+
+
+    <!-- =====================================================
+         REGISTER LINK
+         ===================================================== -->
+
+		 <div class="login-footer">
+
+		   <span>
+		     Don't have an account?
+		   </span>
+
+		   <a
+		     href="#"
+		     data-bind="click: $root.goToRegister">
+		     Register
+		   </a>
+
+		 </div>
+
+</div>

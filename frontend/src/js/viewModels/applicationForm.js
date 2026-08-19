@@ -1,0 +1,46 @@
+define(['knockout', '../services/applicationService', '../services/documentService', '../utils/storage', '../utils/constants', '../utils/errorMessages', 'ojs/ojrouter'], function (ko, applicationService, documentService, storage, constants, errorMessages, Router) {
+    'use strict';
+    function ApplicationFormViewModel(params) {
+        const self = this;
+        const fields = ['dateOfBirth','gender','maritalStatus','addressLine1','addressLine2','city','state','postalCode','country','employmentType','employerName','designation','yearsOfExperience','annualIncome','monthlyExpenses','existingLoanAmount','existingEmiAmount','otherIncome','requestedCreditLimit','consentGiven','declarationAccepted'];
+        self.application = ko.observable(null); self.documents = ko.observableArray([]); self.isLoading = ko.observable(true); self.isSaving = ko.observable(false); self.errorMessage = ko.observable(''); self.successMessage = ko.observable('');
+        self.currentStep = ko.observable(1);
+        self.userName = ko.pureComputed(function () { return (storage.getUser() || {}).name || 'Customer'; });
+        self.requiredDocuments = [{ type:'AADHAAR', label:'Aadhaar document', hint:'Government identity document' }, { type:'PAN', label:'PAN document', hint:'Permanent Account Number document' }, { type:'EMPLOYMENT_PROOF', label:'Employment proof', hint:'Salary slip, employment letter, or business proof' }];
+        fields.forEach(function (name) { self[name] = ko.observable(name === 'consentGiven' || name === 'declarationAccepted' ? false : ''); });
+        self.back = function () { return Router.rootInstance.go('customerDashboard'); };
+        self.previousStep = function () { self.errorMessage(''); self.currentStep(1); };
+        self.validateStepOne = function () {
+            const requiredFields = [
+                { value:self.dateOfBirth(), label:'Date of birth' },
+                { value:self.gender(), label:'Gender' },
+                { value:self.maritalStatus(), label:'Marital status' },
+                { value:self.addressLine1(), label:'Address line 1' },
+                { value:self.city(), label:'City' },
+                { value:self.state(), label:'State' },
+                { value:self.postalCode(), label:'Postal code' },
+                { value:self.country(), label:'Country' },
+                { value:self.employmentType(), label:'Employment type' }
+            ];
+            const missing = requiredFields.find(function (field) { return !String(field.value || '').trim(); });
+            if (missing) { self.errorMessage(missing.label + ' is required before continuing.'); return false; }
+            if (String(self.annualIncome() || '').trim() === '' || !Number.isFinite(Number(self.annualIncome())) || Number(self.annualIncome()) < 0) { self.errorMessage('Enter a valid annual income.'); return false; }
+            if (String(self.monthlyExpenses() || '').trim() === '' || !Number.isFinite(Number(self.monthlyExpenses())) || Number(self.monthlyExpenses()) < 0) { self.errorMessage('Enter valid monthly expenses.'); return false; }
+            if (!Number.isFinite(Number(self.requestedCreditLimit())) || Number(self.requestedCreditLimit()) <= 0) { self.errorMessage('Enter a valid requested credit limit.'); return false; }
+            return true;
+        };
+        self.formatSize = function (size) { return size ? (size / 1024 / 1024).toFixed(2) + ' MB' : ''; };
+        self.documentForType = function (type) { return self.documents().find(function (document) { return document.type === type; }); };
+        self.selectDocument = function (type, data, event) { const file = event.target.files && event.target.files[0]; event.target.value = ''; if (!file) { return; } if (file.type !== 'application/pdf' || !/\.pdf$/i.test(file.name)) { self.errorMessage('Only PDF documents are accepted.'); return; } if (file.size > 5242880) { self.errorMessage('Each document must be 5 MB or smaller.'); return; } const existing = self.documentForType(type); if (existing && existing.previewUrl) { URL.revokeObjectURL(existing.previewUrl); } self.errorMessage(''); self.documents.remove(function (document) { return document.type === type; }); self.documents.push({ type:type, originalFileName:file.name, fileSize:file.size, displaySize:self.formatSize(file.size), verificationStatus:'SELECTED', file:file, previewUrl:URL.createObjectURL(file), selected:true }); };
+        self.previewSelectedDocument = function (document) { if (document && document.previewUrl) { window.open(document.previewUrl, '_blank', 'noopener'); } };
+        self.discardDocument = function (document) { if (document && document.selected) { if (document.previewUrl) { URL.revokeObjectURL(document.previewUrl); } self.documents.remove(document); } };
+        self.payload = function () { return { dateOfBirth:self.dateOfBirth(), gender:self.gender(), maritalStatus:self.maritalStatus(), addressLine1:self.addressLine1(), addressLine2:self.addressLine2() || null, city:self.city(), state:self.state(), postalCode:self.postalCode(), country:self.country(), employmentType:self.employmentType(), employerName:self.employerName() || null, designation:self.designation() || null, yearsOfExperience:self.yearsOfExperience() === '' ? null : Number(self.yearsOfExperience()), annualIncome:Number(self.annualIncome()), monthlyExpenses:Number(self.monthlyExpenses()), existingLoanAmount:self.existingLoanAmount() === '' ? null : Number(self.existingLoanAmount()), existingEmiAmount:self.existingEmiAmount() === '' ? null : Number(self.existingEmiAmount()), otherIncome:self.otherIncome() === '' ? null : Number(self.otherIncome()), requestedCreditLimit:Number(self.requestedCreditLimit()), consentGiven:self.consentGiven(), declarationAccepted:self.declarationAccepted() }; };
+        self.uploadPendingDocuments = async function (applicationId) { const pending = self.documents().filter(function (document) { return document.selected && document.file; }); for (const document of pending) { const uploaded = await documentService.uploadDocument(applicationId, document.type, document.file); self.documents.remove(document); self.documents.push(Object.assign({}, uploaded, { type:uploaded.documentType, displaySize:self.formatSize(uploaded.fileSize), selected:false, file:null, previewUrl:document.previewUrl })); } };
+        self.hasAllRequiredDocuments = function () { return self.requiredDocuments.every(function (required) { return !!self.documentForType(required.type); }); };
+        self.save = async function (submit) { const application = self.application(); self.errorMessage(''); self.successMessage(''); if (!self.consentGiven() || !self.declarationAccepted()) { self.errorMessage('Please read and accept both declarations before saving or submitting.'); return; } self.isSaving(true); try { const saved = await applicationService.updateApplication(application.id, self.payload()); self.application(saved); await self.uploadPendingDocuments(saved.id); if (submit) { if (!self.hasAllRequiredDocuments()) { self.errorMessage('Upload Aadhaar, PAN, and employment proof before submitting.'); return; } await applicationService.submitApplication(saved.id); await Router.rootInstance.go('customerDashboard'); } else { self.successMessage('Your application and selected documents have been saved as a draft.'); } } catch (error) { console.error('Application save failed:', error); self.errorMessage(errorMessages.forRequest(error, 'Unable to save your application. Please review the details and try again.')); } finally { self.isSaving(false); } };
+        self.saveDraft = function () { return self.currentStep() === 1 ? self.continueToDocuments() : self.save(false); }; self.submit = function () { return self.save(true); };
+        self.continueToDocuments = async function () { self.errorMessage(''); self.successMessage(''); if (!self.validateStepOne()) { return; } if (!self.consentGiven() || !self.declarationAccepted()) { self.errorMessage('Please read and accept both declarations before continuing.'); return; } await self.save(false); if (!self.errorMessage()) { self.currentStep(2); self.successMessage('Step 1 has been saved. Upload the required documents to continue.'); } };
+        self.initialize = async function () { const stored = storage.getUser(); const id = params && params.ojRouter && params.ojRouter.parameters.applicationId && params.ojRouter.parameters.applicationId(); if (!stored || stored.role !== constants.ROLES.USER) { await Router.rootInstance.go('login'); return; } try { const result = await Promise.all([applicationService.getApplication(id), documentService.getDocuments(id)]); const application = result[0]; if (application.status !== 'DRAFT') { await Router.rootInstance.go('customerDashboard'); return; } self.application(application); self.documents((result[1] || []).map(function (document) { return Object.assign({}, document, { type:document.documentType, displaySize:self.formatSize(document.fileSize), selected:false, file:null }); })); fields.forEach(function (name) { if (application[name] !== null && application[name] !== undefined) { self[name](application[name]); } }); } catch (error) { self.errorMessage('This application could not be opened.'); } finally { self.isLoading(false); } };
+        self.initialize();
+    } return ApplicationFormViewModel;
+});

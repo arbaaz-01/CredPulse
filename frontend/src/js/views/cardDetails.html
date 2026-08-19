@@ -1,0 +1,1041 @@
+<div class="card-details-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="customer-dashboard-header">
+
+        <div class="customer-brand">
+
+            <div class="customer-brand-mark">
+                CP
+            </div>
+
+
+            <div class="customer-brand-text">
+
+                <h1>
+                    CredPulse
+                </h1>
+
+                <span>
+                    Credit Card Portal
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="customer-header-user">
+
+            <div class="customer-user-info">
+
+                <span class="customer-user-label">
+                    Welcome
+                </span>
+
+                <strong data-bind="text: userName">
+                    Customer
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="customer-logout-button"
+                data-bind="click: logout">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <main class="card-details-content">
+
+
+        <!-- =================================================
+             BACK
+             ================================================= -->
+
+        <button
+            type="button"
+            class="card-details-back-button"
+            data-bind="click: goBack">
+
+            <span aria-hidden="true">
+                ←
+            </span>
+
+            Back to My Cards
+
+        </button>
+
+
+
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
+
+        <section class="card-details-heading">
+
+            <p class="customer-eyebrow">
+                CARD DETAILS
+            </p>
+
+
+            <h2>
+                Credit Card Overview
+            </h2>
+
+
+            <p>
+                View your card information, credit position
+                and current availability.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ERROR
+             ================================================= -->
+
+        <div
+            class="customer-dashboard-error"
+            role="alert"
+            data-bind="
+                visible: errorMessage,
+                text: errorMessage
+            ">
+        </div>
+
+
+
+        <!-- =================================================
+             LOADING
+             ================================================= -->
+
+        <div
+            class="customer-dashboard-loading"
+            data-bind="visible: isLoading">
+
+            <div class="customer-loading-spinner">
+            </div>
+
+            <span>
+                Loading credit card details...
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CARD DETAILS BODY
+             ================================================= -->
+
+        <div
+            class="card-details-body"
+            data-bind="
+                visible: !isLoading(),
+                with: card
+            ">
+
+
+            <!-- =================================================
+                 TOP GRID
+                 ================================================= -->
+
+            <section class="card-details-hero-grid">
+
+
+                <!-- =============================================
+                     PHYSICAL CREDIT CARD
+                     ============================================= -->
+
+                <div class="card-details-card-column">
+
+
+                    <article
+                        class="real-credit-card card-details-physical-card"
+                        data-bind="
+                            css: {
+                                'bank-card-hdfc':
+                                    theme === 'hdfc',
+
+                                'bank-card-icici':
+                                    theme === 'icici',
+
+                                'bank-card-default':
+                                    theme !== 'hdfc' &&
+                                    theme !== 'icici',
+
+                                'real-card-inactive':
+                                    status !== 'ACTIVE'
+                            }
+                        ">
+
+
+                        <!-- LIGHT EFFECT -->
+
+                        <div class="real-card-light">
+                        </div>
+
+
+
+                        <!-- CARD HEADER -->
+
+                        <div class="real-card-header">
+
+
+                            <div class="real-card-bank">
+
+                                <strong data-bind="text: bankName">
+                                    CredPulse Bank
+                                </strong>
+
+
+                                <span data-bind="text: cardProductName">
+                                    Credit Card
+                                </span>
+
+                            </div>
+
+
+                            <span
+                                class="demo-card-badge"
+                                data-bind="visible: isDemo">
+
+                                DEMO
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- CHIP / CONTACTLESS -->
+
+                        <div class="real-card-technology">
+
+
+                            <div class="emv-chip">
+
+                                <div class="emv-chip-line emv-chip-line-1">
+                                </div>
+
+                                <div class="emv-chip-line emv-chip-line-2">
+                                </div>
+
+                                <div class="emv-chip-line emv-chip-line-3">
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="contactless-symbol"
+                                aria-hidden="true">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- NUMBER -->
+
+                        <div class="real-card-number">
+
+                            <span>
+                                ••••
+                            </span>
+
+                            <span>
+                                ••••
+                            </span>
+
+                            <span>
+                                ••••
+                            </span>
+
+                            <span
+                                class="real-card-last-four"
+                                data-bind="text: cardLastFour">
+
+                                0000
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- META -->
+
+                        <div class="real-card-meta">
+
+
+                            <div class="real-card-holder">
+
+                                <small>
+                                    CARD HOLDER
+                                </small>
+
+
+                                <strong data-bind="text: cardHolderName">
+
+                                    CUSTOMER NAME
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="real-card-expiry">
+
+                                <small>
+                                    VALID THRU
+                                </small>
+
+
+                                <strong>
+
+                                    <span data-bind="
+                                        text:
+                                            String(expiryMonth || '')
+                                                .padStart(2, '0')
+                                    ">
+                                        00
+                                    </span>
+
+                                    /
+
+                                    <span data-bind="text: expiryYear">
+                                        0000
+                                    </span>
+
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- NETWORK -->
+
+                            <div
+                                class="real-card-network"
+                                data-bind="
+                                    css: {
+                                        'network-visa':
+                                            cardNetwork === 'VISA',
+
+                                        'network-mastercard':
+                                            cardNetwork === 'MASTERCARD'
+                                    }
+                                ">
+
+
+                                <!-- VISA -->
+
+                                <span
+                                    class="visa-network-text"
+                                    data-bind="
+                                        visible:
+                                            cardNetwork === 'VISA'
+                                    ">
+
+                                    VISA
+
+                                </span>
+
+
+
+                                <!-- MASTERCARD -->
+
+                                <div
+                                    class="mastercard-network"
+                                    data-bind="
+                                        visible:
+                                            cardNetwork === 'MASTERCARD'
+                                    ">
+
+                                    <span
+                                        class="
+                                            mastercard-circle
+                                            mastercard-circle-left
+                                        ">
+                                    </span>
+
+                                    <span
+                                        class="
+                                            mastercard-circle
+                                            mastercard-circle-right
+                                        ">
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- FALLBACK -->
+
+                                <span
+                                    class="generic-network-text"
+                                    data-bind="
+                                        visible:
+                                            cardNetwork !== 'VISA' &&
+                                            cardNetwork !== 'MASTERCARD',
+
+                                        text:
+                                            cardNetwork
+                                    ">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- STATUS -->
+
+                        <div
+                            class="real-card-status"
+                            data-bind="
+                                css: {
+                                    'real-card-status-active':
+                                        status === 'ACTIVE',
+
+                                    'real-card-status-inactive':
+                                        status !== 'ACTIVE'
+                                }
+                            ">
+
+                            <span class="real-card-status-dot">
+                            </span>
+
+                            <span data-bind="text: status">
+                                ACTIVE
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+
+                    <!-- SAFE DATA NOTICE -->
+
+                    <div class="card-security-notice">
+
+                        <div class="card-security-icon">
+                            ✓
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Card information protected
+                            </strong>
+
+
+                            <p>
+                                Sensitive card credentials are not
+                                displayed. Only the masked card
+                                number is available in CredPulse.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     CREDIT POSITION
+                     ============================================= -->
+
+                <div class="card-details-financial-panel">
+
+
+                    <div class="card-details-section-title">
+
+                        <p class="customer-panel-eyebrow">
+                            CREDIT POSITION
+                        </p>
+
+                        <h3>
+                            Available Credit
+                        </h3>
+
+                    </div>
+
+
+
+                    <div class="card-available-amount">
+
+                        <span>
+                            Available to spend
+                        </span>
+
+
+                        <strong
+                            data-bind="
+                                text:
+                                    $parent.formattedAvailableLimit
+                            ">
+
+                            ₹0
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- UTILIZATION -->
+
+                    <div class="card-detail-utilization">
+
+
+                        <div class="card-detail-utilization-heading">
+
+                            <span>
+                                Credit utilization
+                            </span>
+
+
+                            <strong
+                                data-bind="
+                                    text:
+                                        $parent.utilizationText
+                                ">
+
+                                0%
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="customer-utilization-track">
+
+                            <div
+                                class="customer-utilization-fill"
+                                data-bind="
+                                    style: {
+                                        width:
+                                            $parent.utilizationText
+                                    }
+                                ">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FINANCIAL METRICS -->
+
+                    <div class="card-detail-metrics">
+
+
+                        <div class="card-detail-metric">
+
+                            <span>
+                                Credit Limit
+                            </span>
+
+                            <strong
+                                data-bind="
+                                    text:
+                                        $parent.formattedCreditLimit
+                                ">
+
+                                ₹0
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <div class="card-detail-metric">
+
+                            <span>
+                                Used Credit
+                            </span>
+
+                            <strong
+                                data-bind="
+                                    text:
+                                        $parent.formattedUsedCredit
+                                ">
+
+                                ₹0
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <div class="card-detail-metric">
+
+                            <span>
+                                Available Credit
+                            </span>
+
+                            <strong
+                                data-bind="
+                                    text:
+                                        $parent.formattedAvailableLimit
+                                ">
+
+                                ₹0
+
+                            </strong>
+
+                        </div>
+
+
+
+                        <div class="card-detail-metric">
+
+                            <span>
+                                Utilization
+                            </span>
+
+                            <strong
+                                data-bind="
+                                    text:
+                                        $parent.utilizationText
+                                ">
+
+                                0%
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CARD INFORMATION
+                 ================================================= -->
+
+            <section class="card-information-panel">
+
+
+                <div class="card-details-section-title">
+
+                    <p class="customer-panel-eyebrow">
+                        CARD INFORMATION
+                    </p>
+
+
+                    <h3>
+                        Card Details
+                    </h3>
+
+
+                    <p>
+                        Information associated with this credit card.
+                    </p>
+
+                </div>
+
+
+
+                <div class="card-information-grid">
+
+
+                    <!-- BANK -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Issuing Bank
+                        </span>
+
+                        <strong data-bind="text: bankName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- PRODUCT -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Product
+                        </span>
+
+                        <strong data-bind="text: cardProductName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- NETWORK -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Network
+                        </span>
+
+                        <strong data-bind="text: cardNetwork">
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- VARIANT -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Variant
+                        </span>
+
+                        <strong
+                            data-bind="
+                                text:
+                                    $parent.cardVariantText
+                            ">
+
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- MASKED NUMBER -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Number
+                        </span>
+
+                        <strong
+                            class="card-number-detail"
+                            data-bind="
+                                text:
+                                    $parent.maskedCardNumber
+                            ">
+
+                            •••• •••• •••• 0000
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- HOLDER -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Holder
+                        </span>
+
+                        <strong data-bind="text: cardHolderName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- EXPIRY -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Valid Through
+                        </span>
+
+                        <strong
+                            data-bind="
+                                text:
+                                    $parent.formattedExpiry
+                            ">
+
+                            —
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Status
+                        </span>
+
+
+                        <strong
+                            class="card-detail-status"
+                            data-bind="
+                                text: status,
+
+                                css: {
+                                    'card-detail-status-active':
+                                        status === 'ACTIVE',
+
+                                    'card-detail-status-inactive':
+                                        status !== 'ACTIVE'
+                                }
+                            ">
+
+                            ACTIVE
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- REFERENCE -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Card Reference
+                        </span>
+
+                        <strong data-bind="text: id">
+                            —
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- CREATED -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Created
+                        </span>
+
+                        <strong
+                            data-bind="
+                                text:
+                                    $parent.formatDate(
+                                        createdAt
+                                    )
+                            ">
+
+                            —
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- UPDATED -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Last Updated
+                        </span>
+
+                        <strong
+                            data-bind="
+                                text:
+                                    $parent.formatDate(
+                                        updatedAt
+                                    )
+                            ">
+
+                            —
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- RECORD TYPE -->
+
+                    <div class="card-information-item">
+
+                        <span>
+                            Record Type
+                        </span>
+
+
+                        <strong
+                            data-bind="
+                                text:
+                                    isDemo
+                                        ? 'Demo Card'
+                                        : 'Issued Card'
+                            ">
+
+                            Issued Card
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FUTURE LIFECYCLE SECTION
+                 ================================================= -->
+
+            <section class="card-lifecycle-preview">
+
+
+                <div class="card-details-section-title">
+
+                    <p class="customer-panel-eyebrow">
+                        CARD ACTIVITY
+                    </p>
+
+
+                    <h3>
+                        Account Activity
+                    </h3>
+
+
+                    <p>
+                        Transaction, billing and payment information
+                        will appear here as those lifecycle modules
+                        become available.
+                    </p>
+
+                </div>
+
+
+
+                <div class="card-future-feature-grid">
+
+
+                    <div class="card-future-feature">
+
+                        <span class="card-future-icon">
+                            ↔
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Transactions
+                            </strong>
+
+                            <p>
+                                Recent card spending and transaction history.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card-future-feature">
+
+                        <span class="card-future-icon">
+                            ₹
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Billing
+                            </strong>
+
+                            <p>
+                                Statements, outstanding amount and minimum due.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card-future-feature">
+
+                        <span class="card-future-icon">
+                            ✓
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Payments
+                            </strong>
+
+                            <p>
+                                Payment history and upcoming due dates.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>

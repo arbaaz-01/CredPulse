@@ -63,3 +63,18 @@ application-secret.properties
 .metadata/
 
 uploads/
+
+# Oracle JET / Node frontend
+frontend/node_modules/
+frontend/web/
+frontend/staged-themes/
+frontend/coverage/
+frontend/.cache/
+frontend/.temp/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/.env
+frontend/.env.*
+!frontend/.env.example

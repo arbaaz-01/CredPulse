@@ -21,8 +21,12 @@ public interface CreditCardApplicationRepository
             String applicationNumber
     );
 
-     List<CreditCardApplication> findByStatusNot(
+    List<CreditCardApplication> findByStatusNot(
             ApplicationStatus status
+    );
+
+    List<CreditCardApplication> findByStatusIn(
+            List<ApplicationStatus> statuses
     );
 
     Optional<CreditCardApplication> findByIdAndStatusNot(

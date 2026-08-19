@@ -1,0 +1,200 @@
+<div class="register-page">
+
+  <div class="register-card">
+
+    <!-- Header -->
+    <div class="register-header">
+      <h1>CredPulse</h1>
+      <p>Create your account to manage your credit cards.</p>
+    </div>
+
+
+    <!-- Registration Form -->
+    <form
+      data-bind="submit: register"
+      novalidate>
+
+
+      <!-- Name -->
+      <div class="form-group">
+
+        <label for="register-name">
+          Name
+        </label>
+
+        <input
+          id="register-name"
+          type="text"
+          minlength="2"
+          maxlength="100"
+          placeholder="Enter your name"
+          autocomplete="name"
+          required
+          data-bind="
+            value: name,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- Email -->
+      <div class="form-group">
+
+        <label for="register-email">
+          Email
+        </label>
+
+        <input
+          id="register-email"
+          type="email"
+          maxlength="150"
+          placeholder="Enter your email"
+          autocomplete="email"
+          required
+          data-bind="
+            value: email,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- Mobile -->
+      <div class="form-group">
+
+        <label for="register-mobile">
+          Mobile Number
+        </label>
+
+        <input
+          id="register-mobile"
+          type="tel"
+          maxlength="10"
+          inputmode="numeric"
+          pattern="[0-9]{10}"
+          placeholder="Enter 10 digit mobile number"
+          autocomplete="tel"
+          required
+          data-bind="
+            value: mobile,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- Password -->
+      <div class="form-group">
+
+        <label for="register-password">
+          Password
+        </label>
+
+        <input
+          id="register-password"
+          type="password"
+          minlength="8"
+          maxlength="100"
+          placeholder="Enter your password"
+          autocomplete="new-password"
+          required
+          data-bind="
+            value: password,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+
+        <label for="register-confirm-password">
+          Confirm Password
+        </label>
+
+        <input
+          id="register-confirm-password"
+          type="password"
+          minlength="8"
+          maxlength="100"
+          placeholder="Confirm your password"
+          autocomplete="new-password"
+          required
+          data-bind="
+            value: confirmPassword,
+            valueUpdate: 'input',
+            disable: isLoading
+          ">
+
+      </div>
+
+
+      <!-- Error Message -->
+      <div
+        class="error-message"
+        role="alert"
+        aria-live="polite"
+        data-bind="
+          visible: errorMessage,
+          text: errorMessage
+        ">
+      </div>
+
+
+      <!-- Success Message -->
+      <div
+        class="success-message"
+        role="status"
+        aria-live="polite"
+        data-bind="
+          visible: successMessage,
+          text: successMessage
+        ">
+      </div>
+
+
+      <!-- Register Button -->
+      <button
+        type="submit"
+        class="register-button"
+        data-bind="
+          enable: !isLoading()
+        ">
+
+        <span data-bind="visible: !isLoading()">
+          Register
+        </span>
+
+        <span data-bind="visible: isLoading">
+          Creating Account...
+        </span>
+
+      </button>
+
+    </form>
+
+
+    <!-- Login Link -->
+	<div class="register-footer">
+
+	  <span>
+	    Already have an account?
+	  </span>
+
+	  <a
+	    href="#"
+	    data-bind="click: $root.goToLogin">
+	    Login
+	  </a>
+
+	</div>
+
+  </div>
+
+</div>

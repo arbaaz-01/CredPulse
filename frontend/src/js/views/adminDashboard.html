@@ -1,0 +1,660 @@
+<div class="admin-dashboard-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="admin-dashboard-header">
+
+        <div class="admin-dashboard-brand">
+
+            <div class="admin-dashboard-logo">
+                CP
+            </div>
+
+            <div>
+                <h1>CredPulse</h1>
+                <span>Administration Portal</span>
+            </div>
+
+        </div>
+
+
+        <div class="admin-dashboard-user">
+
+            <div class="admin-user-details">
+
+                <span>
+                    Administrator
+                </span>
+
+                <strong data-bind="text: adminName">
+                    Admin
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="admin-logout-button"
+                data-bind="click: logout">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="admin-dashboard-content">
+
+
+        <!-- =================================================
+             WELCOME
+             ================================================= -->
+
+        <section class="admin-welcome-section">
+
+            <p class="admin-eyebrow">
+                SYSTEM ADMINISTRATION
+            </p>
+
+            <h2>
+                Welcome,
+                <span data-bind="text: adminName">
+                    Admin
+                </span>
+            </h2>
+
+            <p>
+                Create and manage Managers and Credit Officers
+                who operate the CredPulse lifecycle platform.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ERROR MESSAGE
+             ================================================= -->
+
+        <div
+            class="admin-message admin-error-message"
+            role="alert"
+            data-bind="
+                visible: errorMessage,
+                text: errorMessage
+            ">
+        </div>
+
+
+
+        <!-- =================================================
+             SUCCESS MESSAGE
+             ================================================= -->
+
+        <div
+            class="admin-message admin-success-message"
+            data-bind="
+                visible: successMessage,
+                text: successMessage
+            ">
+        </div>
+
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+             ================================================= -->
+
+        <section class="admin-summary-grid">
+
+
+            <!-- Total Staff -->
+
+            <article class="admin-summary-card">
+
+                <span class="admin-summary-label">
+                    Total Staff
+                </span>
+
+                <strong
+                    class="admin-summary-value"
+                    data-bind="text: totalStaff">
+                    0
+                </strong>
+
+                <p>
+                    Managers and Credit Officers
+                </p>
+
+            </article>
+
+
+
+            <!-- Managers -->
+
+            <article class="admin-summary-card">
+
+                <span class="admin-summary-label">
+                    Managers
+                </span>
+
+                <strong
+                    class="admin-summary-value"
+                    data-bind="text: totalManagers">
+                    0
+                </strong>
+
+                <p>
+                    Portfolio and operational managers
+                </p>
+
+            </article>
+
+
+
+            <!-- Credit Officers -->
+
+            <article class="admin-summary-card">
+
+                <span class="admin-summary-label">
+                    Credit Officers
+                </span>
+
+                <strong
+                    class="admin-summary-value"
+                    data-bind="text: totalCreditOfficers">
+                    0
+                </strong>
+
+                <p>
+                    Application review officers
+                </p>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CREATE STAFF
+             ================================================= -->
+
+        <section class="admin-panel">
+
+            <div class="admin-panel-header">
+
+                <div>
+
+                    <p class="admin-panel-eyebrow">
+                        STAFF MANAGEMENT
+                    </p>
+
+                    <h3>
+                        Create Staff Account
+                    </h3>
+
+                    <p>
+                        Create a new Manager or Credit Officer.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                class="admin-create-form"
+                data-bind="
+                    submit: createStaff
+                ">
+
+
+                <!-- Full Name -->
+
+                <div class="admin-form-group">
+
+                    <label for="staffName">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="staffName"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Enter full name"
+                        data-bind="
+                            value: newStaffName,
+                            valueUpdate: 'input',
+                            disable: isCreating
+                        ">
+
+                </div>
+
+
+
+                <!-- Email -->
+
+                <div class="admin-form-group">
+
+                    <label for="staffEmail">
+                        Email Address
+                    </label>
+
+                    <input
+                        id="staffEmail"
+                        type="email"
+                        autocomplete="off"
+                        placeholder="name@credpulse.com"
+                        data-bind="
+                            value: newStaffEmail,
+                            valueUpdate: 'input',
+                            disable: isCreating
+                        ">
+
+                </div>
+
+
+
+                <!-- Mobile -->
+
+                <div class="admin-form-group">
+
+                    <label for="staffMobile">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        id="staffMobile"
+                        type="tel"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        placeholder="Enter exactly 10 digits"
+                        data-bind="
+                            value: newStaffMobile,
+                            valueUpdate: 'input',
+                            disable: isCreating
+                        ">
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="admin-form-group">
+
+                    <label for="staffPassword">
+                        Temporary Password
+                    </label>
+
+                    <input
+                        id="staffPassword"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Minimum 8 characters"
+                        data-bind="
+                            value: newStaffPassword,
+                            valueUpdate: 'input',
+                            disable: isCreating
+                        ">
+
+                </div>
+
+
+
+                <!-- Role -->
+
+                <div class="admin-form-group">
+
+                    <label for="staffRole">
+                        Role
+                    </label>
+
+                    <select
+                        id="staffRole"
+                        data-bind="
+                            value: newStaffRole,
+                            disable: isCreating
+                        ">
+
+                        <option value="">
+                            Select role
+                        </option>
+
+                        <option value="MANAGER">
+                            Manager
+                        </option>
+
+                        <option value="CREDIT_OFFICER">
+                            Credit Officer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Actions -->
+
+                <div class="admin-form-actions">
+
+                    <button
+                        type="button"
+                        class="admin-secondary-button"
+                        data-bind="
+                            click: clearCreateForm,
+                            disable: isCreating
+                        ">
+                        Clear
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="admin-primary-button"
+                        data-bind="
+                            disable: isCreating,
+                            text: isCreating()
+                                ? 'Creating...'
+                                : 'Create Staff'
+                        ">
+                        Create Staff
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STAFF DIRECTORY
+             ================================================= -->
+
+        <section class="admin-panel">
+
+            <div class="admin-panel-header admin-directory-header">
+
+                <div>
+
+                    <p class="admin-panel-eyebrow">
+                        STAFF DIRECTORY
+                    </p>
+
+                    <h3>
+                        Managers & Credit Officers
+                    </h3>
+
+                    <p>
+                        View all staff accounts managed by the administrator.
+                    </p>
+
+                </div>
+
+
+                <!-- Search -->
+
+                <div class="admin-search-box">
+
+                    <input
+                        type="search"
+                        placeholder="Search name or email..."
+                        data-bind="
+                            value: searchQuery,
+                            valueUpdate: 'input'
+                        ">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FILTERS
+                 ================================================= -->
+
+            <div class="admin-role-filters">
+
+                <button
+                    type="button"
+                    data-bind="
+                        click: function () {
+                            setRoleFilter('ALL');
+                        },
+                        css: {
+                            active: roleFilter() === 'ALL'
+                        }
+                    ">
+                    All Staff
+                </button>
+
+
+                <button
+                    type="button"
+                    data-bind="
+                        click: function () {
+                            setRoleFilter('MANAGER');
+                        },
+                        css: {
+                            active: roleFilter() === 'MANAGER'
+                        }
+                    ">
+                    Managers
+                </button>
+
+
+                <button
+                    type="button"
+                    data-bind="
+                        click: function () {
+                            setRoleFilter('CREDIT_OFFICER');
+                        },
+                        css: {
+                            active:
+                                roleFilter() === 'CREDIT_OFFICER'
+                        }
+                    ">
+                    Credit Officers
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LOADING
+                 ================================================= -->
+
+            <div
+                class="admin-loading-state"
+                data-bind="visible: isLoading">
+
+                Loading staff accounts...
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STAFF TABLE
+                 ================================================= -->
+
+            <div
+                class="admin-table-wrapper"
+                data-bind="
+                    visible:
+                        !isLoading() &&
+                        filteredStaff().length > 0
+                ">
+
+                <table class="admin-staff-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        data-bind="
+                            foreach: filteredStaff
+                        ">
+
+                        <tr>
+
+                            <td>
+
+                                <div class="staff-name-cell">
+
+                                    <div
+                                        class="staff-avatar"
+                                        data-bind="
+                                            text:
+                                                name
+                                                    ? name
+                                                        .charAt(0)
+                                                        .toUpperCase()
+                                                    : '?'
+                                        ">
+                                    </div>
+
+
+                                    <strong
+                                        data-bind="text: name">
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <td
+                                data-bind="text: email">
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="staff-role-badge"
+                                    data-bind="
+                                        text:
+                                            $parent.formatRole(role),
+
+                                        css: {
+                                            'manager-role':
+                                                role === 'MANAGER',
+
+                                            'credit-officer-role':
+                                                role === 'CREDIT_OFFICER'
+                                        }
+                                    ">
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="staff-status-badge"
+                                    data-bind="
+                                        text:
+                                            status || 'ACTIVE',
+
+                                        css: {
+                                            'staff-status-active':
+                                                !status ||
+                                                status === 'ACTIVE',
+
+                                            'staff-status-inactive':
+                                                status === 'INACTIVE'
+                                        }
+                                    ">
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EMPTY STATE
+                 ================================================= -->
+
+            <div
+                class="admin-empty-state"
+                data-bind="
+                    visible:
+                        !isLoading() &&
+                        filteredStaff().length === 0
+                ">
+
+                <div class="admin-empty-icon">
+                    CP
+                </div>
+
+                <h4>
+                    No staff members found
+                </h4>
+
+                <p data-bind="
+                    visible: staff().length === 0
+                ">
+                    Managers and Credit Officers will appear here
+                    when they are created.
+                </p>
+
+                <p data-bind="
+                    visible: staff().length > 0
+                ">
+                    No staff members match the selected filter
+                    or search query.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>

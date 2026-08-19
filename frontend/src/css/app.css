@@ -1,0 +1,853 @@
+/* ============================================================
+   CredPulse - Global Banking Theme
+   ============================================================ */
+
+@import url("login.css");
+@import url("register.css");
+@import url("./customerDashboard.css");
+@import url("./customerFlows.css");
+@import url("./staffDashboard.css");
+@import url("./adminDashboard.css");
+
+
+
+
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+
+:root {
+
+  /* Brand */
+  --cp-navy-950: #071426;
+  --cp-navy-900: #0a1b33;
+  --cp-navy-850: #0d2342;
+  --cp-navy-800: #102b50;
+
+  --cp-blue-600: #2563eb;
+  --cp-blue-500: #3b82f6;
+  --cp-blue-400: #60a5fa;
+
+  --cp-cyan-400: #38bdf8;
+
+  --cp-success: #059669;
+  --cp-success-light: #ecfdf5;
+
+  --cp-danger: #dc2626;
+  --cp-danger-light: #fef2f2;
+
+  /* Surfaces */
+  --cp-white: #ffffff;
+  --cp-surface: #f8fafc;
+  --cp-border: #dbe4f0;
+
+  /* Text */
+  --cp-text-primary: #0f172a;
+  --cp-text-secondary: #64748b;
+  --cp-text-muted: #94a3b8;
+
+  /* Effects */
+  --cp-shadow-sm:
+    0 4px 14px rgba(15, 23, 42, 0.08);
+
+  --cp-shadow-md:
+    0 18px 50px rgba(3, 15, 35, 0.18);
+
+  --cp-shadow-focus:
+    0 0 0 4px rgba(37, 99, 235, 0.14);
+
+  --cp-radius-sm: 10px;
+  --cp-radius-md: 16px;
+  --cp-radius-lg: 22px;
+  --cp-radius-xl: 28px;
+  --cp-page-background: #f4f7fb;
+  --cp-surface-subtle: #f8fbff;
+  --cp-brand-gradient: linear-gradient(135deg, #0a2353 0%, #164fb9 58%, #2563eb 100%);
+  --cp-control-height: 48px;
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+html {
+  background: var(--cp-navy-950);
+}
+
+body {
+  min-height: 100vh;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  color: var(--cp-text-primary);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ============================================================
+   ORACLE JET APP SHELL
+   ============================================================ */
+
+#globalBody,
+.oj-web-applayout-page,
+.oj-web-applayout-content {
+  min-height: 100vh;
+}
+
+#pageContent {
+  min-height: 100vh;
+}
+
+
+/* ============================================================
+   GLOBAL SELECTION
+   ============================================================ */
+
+::selection {
+  background: rgba(37, 99, 235, 0.22);
+  color: #071426;
+}
+
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+button,
+input,
+a {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(56, 189, 248, 0.45);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   CREDPULSE BANKING DESIGN SYSTEM
+   Shared visual language for every authenticated workspace.
+   ============================================================ */
+
+.customer-dashboard-page,
+.admin-dashboard-page,
+.staff-dashboard-page,
+.application-page {
+  background: var(--cp-page-background);
+  color: var(--cp-text-primary);
+}
+
+.customer-dashboard-header,
+.admin-dashboard-header,
+.staff-dashboard-page header {
+  min-height: 78px;
+  border-bottom: 1px solid var(--cp-border);
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.045);
+}
+
+.customer-brand-mark,
+.admin-dashboard-logo {
+  background: var(--cp-brand-gradient);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+}
+
+.customer-dashboard-content,
+.admin-dashboard-content,
+.product-details-content {
+  width: min(1280px, calc(100% - 48px));
+}
+
+.customer-summary-card,
+.admin-summary-card,
+.customer-cards-section,
+.admin-panel,
+.staff-dashboard-card,
+.product-details-intro,
+.application-form {
+  border-color: var(--cp-border);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.055);
+}
+
+.customer-summary-card,
+.admin-summary-card {
+  background: linear-gradient(145deg, #ffffff, #f9fbff);
+}
+
+.customer-logout-button,
+.admin-logout-button,
+.staff-dashboard-page header button,
+.back-link {
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.customer-logout-button:hover,
+.admin-logout-button:hover,
+.staff-dashboard-page header button:hover,
+.back-link:hover {
+  transform: translateY(-1px);
+}
+
+.product-action,
+.hero-primary,
+.form-actions button,
+.application-actions button,
+.login-button,
+.register-button {
+  min-height: var(--cp-control-height);
+  border-radius: 10px;
+}
+
+.application-form input,
+.application-form select,
+.application-start input,
+.admin-create-form input,
+.admin-create-form select {
+  min-height: var(--cp-control-height);
+  border-color: #cbd7e6;
+  background: #fbfdff;
+}
+
+.application-form input:focus,
+.application-form select:focus,
+.application-start input:focus,
+.admin-create-form input:focus,
+.admin-create-form select:focus {
+  border-color: var(--cp-blue-600);
+  box-shadow: var(--cp-shadow-focus);
+  outline: none;
+}
+
+.customer-dashboard-error,
+.error-message {
+  border-left: 4px solid var(--cp-danger);
+}
+
+.form-success,
+.success-message {
+  border-left: 4px solid var(--cp-success);
+}
+
+@media (max-width: 650px) {
+  .customer-dashboard-content,
+  .admin-dashboard-content,
+  .product-details-content {
+    width: calc(100% - 28px);
+  }
+
+  .customer-dashboard-header,
+  .admin-dashboard-header,
+  .staff-dashboard-page header {
+    min-height: 68px;
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+}
+
+/* ============================================================
+   APPROVED CREDPULSE EDITORIAL BANKING THEME
+   Shared across every role and workflow page.
+   ============================================================ */
+
+:root {
+  --cp-editorial-ink: #2d1c16;
+  --cp-editorial-muted: #735f55;
+  --cp-editorial-paper: #fffaf2;
+  --cp-editorial-ivory: #f8f1e6;
+  --cp-editorial-line: #e7d4c2;
+  --cp-editorial-accent: #c9532d;
+  --cp-editorial-accent-dark: #8d351f;
+}
+
+.customer-dashboard-page,
+.product-details-page,
+.application-shell,
+.staff-dashboard-page,
+.admin-dashboard-page {
+  background: var(--cp-editorial-ivory);
+  color: var(--cp-editorial-ink);
+}
+
+.customer-dashboard-header,
+.staff-dashboard-page header,
+.admin-dashboard-header {
+  background: rgba(255, 250, 242, .97);
+  border-bottom-color: var(--cp-editorial-line);
+  box-shadow: 0 2px 15px rgba(45, 28, 22, .055);
+}
+
+.customer-brand-text h1,
+.admin-dashboard-brand h1,
+.staff-dashboard-page h1,
+.customer-welcome-section h2,
+.customer-hero h2,
+.product-details-intro h2,
+.application-form h2,
+.staff-dashboard-page h2 {
+  color: var(--cp-editorial-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -.55px;
+}
+
+.customer-brand-text span,
+.admin-dashboard-brand span,
+.customer-user-label,
+.admin-user-details span,
+.staff-kicker {
+  color: var(--cp-editorial-muted);
+}
+
+.customer-brand-mark,
+.admin-dashboard-logo {
+  background: var(--cp-editorial-paper);
+  border: 1px solid var(--cp-editorial-line);
+  color: var(--cp-editorial-accent);
+  box-shadow: 3px 4px 0 rgba(201, 83, 45, .14);
+}
+
+.customer-summary-card,
+.customer-cards-section,
+.product-details-intro,
+.application-form,
+.staff-dashboard-card,
+.admin-panel,
+.admin-summary-card {
+  border-color: var(--cp-editorial-line);
+  border-radius: 5px;
+  background: var(--cp-editorial-paper);
+  box-shadow: 5px 6px 0 rgba(201, 83, 45, .1);
+}
+
+.customer-summary-value,
+.admin-summary-value {
+  color: var(--cp-editorial-accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+.customer-summary-label,
+.admin-summary-label,
+.customer-panel-eyebrow,
+.admin-panel-eyebrow {
+  color: var(--cp-editorial-muted);
+}
+
+.hero-primary,
+.product-action,
+.form-actions .product-action,
+.login-button,
+.register-button,
+.admin-create-button,
+.admin-role-filters button.active,
+.staff-dashboard-page header button {
+  border-color: var(--cp-editorial-accent);
+  background: var(--cp-editorial-accent);
+  color: #fffaf2;
+  box-shadow: 3px 4px 0 var(--cp-editorial-accent-dark);
+}
+
+.hero-primary:hover,
+.product-action:hover,
+.login-button:hover,
+.register-button:hover,
+.admin-create-button:hover,
+.staff-dashboard-page header button:hover {
+  background: #b64525;
+}
+
+.customer-hero,
+.customer-hero-existing {
+  background: radial-gradient(circle at 86% 12%, rgba(201, 83, 45, .24), transparent 25%), linear-gradient(125deg, #3a2119, #7f321f 68%, #c9532d);
+}
+
+.application-form input,
+.application-form select,
+.application-start input,
+.admin-create-form input,
+.admin-create-form select,
+.login-page .form-group input,
+.register-page .form-group input {
+  border-color: var(--cp-editorial-line);
+  border-radius: 4px;
+  background: #fffdf9;
+}
+
+.application-form input:focus,
+.application-form select:focus,
+.application-start input:focus,
+.admin-create-form input:focus,
+.admin-create-form select:focus,
+.login-page .form-group input:focus,
+.register-page .form-group input:focus {
+  border-color: var(--cp-editorial-accent);
+  box-shadow: 0 0 0 3px rgba(201, 83, 45, .13);
+}
+
+.login-page,
+.register-page {
+  background: radial-gradient(circle at 85% 15%, rgba(201, 83, 45, .18), transparent 30%), linear-gradient(145deg, #2d1c16, #5e2b1d 58%, #8d351f);
+}
+
+.login-card,
+.register-card { border-color: var(--cp-editorial-line); border-radius: 5px; background: var(--cp-editorial-paper); box-shadow: 7px 8px 0 rgba(45, 28, 22, .2); }
+.login-card::before,
+.register-card::before { background: var(--cp-editorial-accent); }
+
+@media (max-width: 650px) {
+  .customer-dashboard-content,
+  .product-details-content,
+  .application-page-connected { width: calc(100% - 28px); }
+}
+
+/* Final cross-page alignment: match the approved Admin Dashboard exactly. */
+.customer-dashboard-page,
+.product-details-page,
+.application-shell,
+.staff-dashboard-page,
+.admin-dashboard-page {
+  background: #f5f7fb;
+  color: #172033;
+}
+
+.customer-dashboard-header,
+.staff-dashboard-page header,
+.admin-dashboard-header {
+  background: linear-gradient(105deg, #081a37 0%, #102e63 68%, #173f83 100%);
+  border-bottom: 0;
+  box-shadow: 0 8px 25px rgba(7, 20, 38, .18);
+}
+
+.customer-brand-text h1,
+.admin-dashboard-brand h1 { color: #ffffff; font-family: Inter, "Segoe UI", Arial, sans-serif; font-weight: 800; letter-spacing: -.3px; }
+.customer-brand-text span,
+.admin-dashboard-brand span,
+.customer-user-label,
+.admin-user-details span { color: rgba(255,255,255,.62); }
+.customer-brand-mark,
+.admin-dashboard-logo { border: 1px solid rgba(255,255,255,.28); border-radius: 12px; background: rgba(255,255,255,.12); color: #ffffff; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+
+.customer-welcome-section h2,
+.customer-hero h2,
+.product-details-intro h2,
+.application-form h2,
+.staff-dashboard-page h1,
+.staff-dashboard-page h2,
+.admin-dashboard-content h2,
+.admin-dashboard-content h3,
+.admin-panel h3 { color: #102a56; font-family: Georgia, "Times New Roman", serif; font-weight: 500; letter-spacing: -.45px; }
+
+.customer-summary-card,
+.customer-cards-section,
+.product-details-intro,
+.application-form,
+.staff-dashboard-card,
+.admin-panel,
+.admin-summary-card { border-color: #e4e9f2; border-radius: 16px; background: #ffffff; box-shadow: 0 5px 18px rgba(15,23,42,.045); }
+
+.customer-summary-value,
+.admin-summary-value { color: #c9532d; font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+.hero-primary,
+.product-action,
+.form-actions .product-action,
+.login-button,
+.register-button,
+.admin-create-button,
+.admin-role-filters button.active,
+.staff-dashboard-page header button { border-color: #c9532d; background: #c9532d; color: #ffffff; box-shadow: 3px 4px 0 #8d351f; }
+.hero-primary:hover,
+.product-action:hover,
+.login-button:hover,
+.register-button:hover,
+.admin-create-button:hover,
+.staff-dashboard-page header button:hover { background: #b64525; }
+
+.customer-hero,
+.customer-hero-existing { background: linear-gradient(105deg, #081a37 0%, #102e63 68%, #173f83 100%); }
+.application-form input,
+.application-form select,
+.application-start input,
+.admin-create-form input,
+.admin-create-form select,
+.login-page .form-group input,
+.register-page .form-group input { border-color: #d6deea; border-radius: 10px; background: #fbfdff; }
+.login-page,
+.register-page { background: linear-gradient(145deg, #061222 0%, #0a1b33 50%, #102b50 100%); }
+.login-card,
+.register-card { border-color: rgba(255,255,255,.72); border-radius: 22px; background: rgba(255,255,255,.97); box-shadow: 0 30px 75px rgba(0,0,0,.28); }
+
+
+/* ============================================================
+   ORACLE DEFAULT DEMO ASSETS
+   ============================================================ */
+
+.demo-oracle-icon {
+  width: 137px;
+  height: 18px;
+  content: url("images/oracle_logo.svg");
+}
+
+html:not([dir="rtl"]) .demo-oracle-icon {
+  padding-right: 4px;
+}
+
+html[dir="rtl"] .demo-oracle-icon {
+  padding-left: 4px;
+}
+
+.demo-oracle-icon:before {
+  display: inline;
+}
+
+.demo-appheader-avatar {
+  width: 24px;
+  height: 24px;
+}
+
+.demo-appheader-avatar:before {
+  content: url("images/avatar_24px.png");
+}
+
+/* ============================================================
+   APPROVED ADMIN DASHBOARD THEME — FINAL CASCADE LAYER
+   Every role inherits this banking shell. Page CSS may control
+   layout only; these rules control the shared visual language.
+   ============================================================ */
+:root {
+  --cp-admin-navy: #081a37;
+  --cp-admin-navy-mid: #102e63;
+  --cp-admin-navy-light: #173f83;
+  --cp-admin-page: #f5f7fb;
+  --cp-admin-ink: #172033;
+  --cp-admin-heading: #102a56;
+  --cp-admin-muted: #718096;
+  --cp-admin-line: #e4e9f2;
+  --cp-admin-panel: #ffffff;
+  --cp-admin-accent: #c9532d;
+  --cp-admin-accent-dark: #8d351f;
+  --cp-admin-shadow: 0 5px 18px rgba(15, 23, 42, .045);
+  --cp-admin-header: linear-gradient(105deg, #081a37 0%, #102e63 68%, #173f83 100%);
+  --cp-body-font: Inter, "Segoe UI", Arial, sans-serif;
+  --cp-display-font: Georgia, "Times New Roman", serif;
+}
+
+.customer-dashboard-page,
+.product-details-page,
+.application-shell,
+.staff-dashboard-page,
+.admin-dashboard-page {
+  min-height: 100vh;
+  background: var(--cp-admin-page) !important;
+  color: var(--cp-admin-ink) !important;
+  font-family: var(--cp-body-font);
+}
+
+.customer-dashboard-header,
+.product-header,
+.staff-dashboard-page > header,
+.admin-dashboard-header {
+  min-height: 74px;
+  background: var(--cp-admin-header) !important;
+  border: 0 !important;
+  box-shadow: 0 8px 25px rgba(7, 20, 38, .18) !important;
+}
+
+.customer-brand-mark,
+.admin-dashboard-logo {
+  border: 1px solid rgba(255, 255, 255, .28) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, .12) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18) !important;
+}
+
+.customer-brand-text h1,
+.admin-dashboard-brand h1,
+.staff-dashboard-page > header h1 {
+  color: #fff !important;
+  font-family: var(--cp-body-font) !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.3px !important;
+}
+
+.customer-brand-text span,
+.admin-dashboard-brand span,
+.customer-user-label,
+.admin-user-details span,
+.product-breadcrumb,
+.staff-dashboard-page > header .staff-kicker {
+  color: rgba(255, 255, 255, .62) !important;
+}
+
+.customer-user-info,
+.product-user-info,
+.admin-user-details { border-right-color: rgba(255, 255, 255, .2) !important; }
+.customer-header-user strong,
+.admin-user-details strong,
+.product-breadcrumb strong,
+.product-breadcrumb b { color: #fff !important; }
+
+.customer-logout-button,
+.product-back-button,
+.admin-logout-button,
+.staff-dashboard-page > header button {
+  border: 1px solid rgba(255, 255, 255, .24) !important;
+  border-radius: 10px !important;
+  background: rgba(255, 255, 255, .10) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.customer-logout-button:hover,
+.product-back-button:hover,
+.admin-logout-button:hover,
+.staff-dashboard-page > header button:hover {
+  background: rgba(255, 255, 255, .18) !important;
+  color: #fff !important;
+}
+
+.customer-summary-card,
+.customer-cards-section,
+.product-card,
+.application-row,
+.product-detail,
+.product-details-intro,
+.application-form,
+.staff-dashboard-card,
+.admin-panel,
+.admin-summary-card {
+  border-color: var(--cp-admin-line) !important;
+  border-radius: 16px !important;
+  background: var(--cp-admin-panel) !important;
+  box-shadow: var(--cp-admin-shadow) !important;
+}
+
+.customer-welcome-section h2,
+.customer-cards-header h3,
+.product-card h4,
+.application-row h4,
+.product-detail h2,
+.product-details-intro h2,
+.application-form h2,
+.application-form legend,
+.staff-dashboard-card h2,
+.admin-dashboard-content h2,
+.admin-dashboard-content h3,
+.admin-panel h3 {
+  color: var(--cp-admin-heading) !important;
+  font-family: var(--cp-display-font) !important;
+  font-weight: 500 !important;
+  letter-spacing: -.45px;
+}
+
+.customer-hero,
+.customer-hero-existing {
+  background: var(--cp-admin-header) !important;
+  box-shadow: 0 18px 42px rgba(7, 20, 38, .20) !important;
+}
+.customer-hero h2 { color: #fff !important; font-family: var(--cp-display-font) !important; font-weight: 500 !important; }
+.customer-hero .customer-eyebrow { color: rgba(255, 255, 255, .72) !important; }
+
+.product-code,
+.customer-dashboard-content .customer-eyebrow,
+.application-form .customer-eyebrow,
+.product-details-intro .customer-eyebrow,
+.staff-dashboard-card .staff-kicker,
+.admin-panel-eyebrow { color: var(--cp-admin-accent) !important; }
+
+.customer-summary-value,
+.admin-summary-value {
+  color: var(--cp-admin-accent) !important;
+  font-family: var(--cp-display-font) !important;
+  font-weight: 500 !important;
+}
+
+.hero-primary,
+.product-action,
+.application-actions button,
+.form-actions .product-action,
+.login-button,
+.register-button,
+.admin-create-button,
+.admin-primary-button,
+.admin-role-filters button.active {
+  border-color: var(--cp-admin-accent) !important;
+  border-radius: 10px !important;
+  background: var(--cp-admin-accent) !important;
+  color: #fff !important;
+  box-shadow: 3px 4px 0 var(--cp-admin-accent-dark) !important;
+}
+
+.hero-primary:hover,
+.product-action:hover,
+.application-actions button:hover,
+.form-actions .product-action:hover,
+.login-button:hover,
+.register-button:hover,
+.admin-create-button:hover,
+.admin-primary-button:hover { background: #b64525 !important; }
+
+.form-actions button:not(.product-action) {
+  border: 1px solid #d6deea !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  color: var(--cp-admin-heading) !important;
+  box-shadow: none !important;
+}
+
+.application-form input,
+.application-form select,
+.application-start input,
+.admin-create-form input,
+.admin-create-form select,
+.admin-search-box input,
+.login-page .form-group input,
+.register-page .form-group input {
+  border-color: #d6deea !important;
+  border-radius: 10px !important;
+  background: #fbfdff !important;
+  color: var(--cp-admin-ink) !important;
+}
+
+.application-form input:focus,
+.application-form select:focus,
+.application-start input:focus,
+.admin-create-form input:focus,
+.admin-create-form select:focus,
+.login-page .form-group input:focus,
+.register-page .form-group input:focus {
+  border-color: var(--cp-admin-accent) !important;
+  box-shadow: 0 0 0 3px rgba(201, 83, 45, .13) !important;
+}
+
+.document-upload-section,
+.application-declarations,
+.product-details-note,
+.staff-backend-notice {
+  border-color: #dbe4f0 !important;
+  border-radius: 14px !important;
+  background: #f8fbff !important;
+}
+
+.catalog-count,
+.application-status { background: #fff3ee !important; color: var(--cp-admin-accent) !important; }
+.status-SUBMITTED,
+.status-UNDER_REVIEW { background: #fff3ee !important; color: var(--cp-admin-accent) !important; }
+
+.document-slot { align-items: flex-start !important; }
+.document-slot-details { min-width: 0; }
+.document-preview {
+  flex-wrap: wrap;
+  margin-top: 11px;
+  padding: 10px 11px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+.document-preview > div { min-width: 120px; }
+.document-preview > div strong { display: block; overflow: hidden; color: var(--cp-admin-heading); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.document-preview > div span { margin-top: 2px; }
+.document-preview-button {
+  display: inline-flex;
+  border: 0;
+  background: transparent;
+  color: var(--cp-admin-accent);
+  cursor: pointer;
+  font: 700 12px var(--cp-body-font);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.document-selected { color: var(--cp-admin-accent) !important; font-weight: 700; }
+.document-discard { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; }
+.document-picker { white-space: nowrap; }
+.application-declarations-step-one { margin-top: 25px; }
+.application-declaration-copy { margin: 5px 0 12px; color: var(--cp-admin-muted); font-size: 13px; line-height: 1.55; }
+
+.application-detail-card {
+  padding: 32px;
+  border: 1px solid var(--cp-admin-line);
+  border-radius: 16px;
+  background: var(--cp-admin-panel);
+  box-shadow: var(--cp-admin-shadow);
+}
+.application-detail-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--cp-admin-line); }
+.application-detail-heading h2 { margin: 5px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: clamp(28px, 4vw, 38px); font-weight: 500; }
+.application-detail-heading p:last-child { margin: 0; color: var(--cp-admin-muted); font-size: 13px; font-weight: 700; }
+.application-review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 24px; }
+.application-review-grid > section { padding: 20px; border: 1px solid var(--cp-admin-line); border-radius: 14px; background: #fbfdff; }
+.application-review-grid h3, .application-documents-review h3 { margin: 0 0 16px; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 21px; font-weight: 500; }
+.application-review-grid dl { display: grid; gap: 13px; margin: 0; }
+.application-review-grid dt { color: var(--cp-admin-muted); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.application-review-grid dd { margin: 4px 0 0; color: var(--cp-admin-ink); font-size: 14px; font-weight: 650; line-height: 1.45; overflow-wrap: anywhere; }
+.application-documents-review { margin-top: 22px; padding-top: 24px; border-top: 1px solid var(--cp-admin-line); }
+.document-review-list { display: grid; gap: 11px; }
+.document-review-list article { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 16px; border: 1px solid var(--cp-admin-line); border-radius: 12px; background: #fbfdff; }
+.document-review-list article > div { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 10px; min-width: 0; }
+.document-review-list .document-pdf { grid-row: span 2; }
+.document-review-list strong { color: var(--cp-admin-heading); font-size: 13px; }
+.document-review-list article span:last-child { overflow: hidden; color: var(--cp-admin-muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.application-documents-empty { margin: 0; padding: 20px; border: 1px dashed #cfd9e6; border-radius: 12px; color: var(--cp-admin-muted); text-align: center; }
+@media (max-width: 700px) { .application-detail-card { padding: 21px 16px; }.application-detail-heading, .document-review-list article { align-items: flex-start; flex-direction: column; }.application-review-grid { grid-template-columns: 1fr; }.document-review-list .product-action { width: 100%; } }
+
+.issued-cards-section { border-color: #d9e2f0 !important; }
+.issued-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+.issued-card-summary { padding: 20px; border: 1px solid #dbe4f0; border-radius: 14px; background: linear-gradient(140deg, #f9fbff, #edf4ff); }
+.issued-card-summary h4 { margin: 8px 0 3px; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 23px; font-weight: 500; letter-spacing: .04em; }
+.issued-card-summary p { margin: 0; color: var(--cp-admin-muted); font-size: 13px; }
+.issued-card-summary dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0; }
+.issued-card-summary dl div { min-width: 0; }.issued-card-summary dt { color: var(--cp-admin-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }.issued-card-summary dd { margin: 5px 0 0; color: var(--cp-admin-ink); font-size: 13px; font-weight: 750; }
+
+.credit-officer-content { width: min(1320px, calc(100% - 48px)); margin: 0 auto; padding: 32px 0 70px; }
+.officer-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }.officer-summary-grid article { padding: 20px; border: 1px solid var(--cp-admin-line); border-radius: 16px; background: #fff; box-shadow: var(--cp-admin-shadow); }.officer-summary-grid span { color: var(--cp-admin-muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }.officer-summary-grid strong { display: block; margin: 8px 0 4px; color: var(--cp-admin-accent); font-family: var(--cp-display-font); font-size: 36px; font-weight: 500; }.officer-summary-grid p { margin: 0; color: var(--cp-admin-muted); font-size: 12px; }
+.officer-workspace { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(0, 1.2fr); gap: 20px; margin-top: 22px; }.officer-queue, .officer-detail { padding: 24px; border: 1px solid var(--cp-admin-line); border-radius: 16px; background: #fff; box-shadow: var(--cp-admin-shadow); }.officer-queue-list { display: grid; gap: 9px; margin-top: 18px; }.officer-queue-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; width: 100%; padding: 14px; border: 1px solid #e3e9f2; border-radius: 12px; background: #fbfdff; color: var(--cp-admin-ink); cursor: pointer; text-align: left; }.officer-queue-item:hover, .officer-queue-item.is-selected { border-color: rgba(201,83,45,.55); background: #fff7f3; }.officer-queue-item span { color: var(--cp-admin-accent); font-size: 10px; font-weight: 800; letter-spacing: .07em; }.officer-queue-item strong { font-size: 14px; }.officer-queue-item small { color: var(--cp-admin-muted); font-size: 12px; }.officer-queue-item em { grid-row: span 2; align-self: center; color: var(--cp-admin-heading); font-size: 11px; font-style: normal; font-weight: 800; }
+.officer-detail-heading { display: flex; justify-content: space-between; gap: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--cp-admin-line); }.officer-detail h2 { margin: 5px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 29px; font-weight: 500; }.officer-detail-heading > div > span { color: var(--cp-admin-muted); font-size: 12px; font-weight: 700; }.officer-detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; margin: 20px 0; }.officer-detail-grid div { padding: 13px; border: 1px solid #e3e9f2; border-radius: 11px; background: #fbfdff; }.officer-detail-grid span { display: block; color: var(--cp-admin-muted); font-size: 11px; }.officer-detail-grid strong { display: block; margin-top: 5px; color: var(--cp-admin-ink); font-size: 15px; }.officer-risk-note { margin: 0; padding: 13px; border-left: 3px solid var(--cp-admin-accent); background: #fff7f3; color: #5b4a45; font-size: 13px; line-height: 1.55; }.officer-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }.officer-reject { padding: 10px 15px; border: 1px solid #d6deea; border-radius: 10px; background: #fff; color: var(--cp-admin-heading); cursor: pointer; font-weight: 750; }.officer-detail .staff-backend-notice { margin-top: 20px; }.officer-detail-empty { display: flex; flex-direction: column; justify-content: center; min-height: 320px; color: var(--cp-admin-muted); }
+.officer-approved-heading { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--cp-admin-line); }.officer-approved-heading h3 { margin: 5px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 22px; font-weight: 500; }.officer-approved-heading p:last-child { margin: 0; color: var(--cp-admin-muted); font-size: 12px; }.officer-approved-list { display: grid; gap: 9px; margin-top: 15px; }.officer-approved-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; width: 100%; padding: 14px; border: 1px solid #dce7dd; border-radius: 12px; background: #f7fcf8; color: var(--cp-admin-ink); cursor: pointer; text-align: left; }.officer-approved-item:hover, .officer-approved-item.is-selected { border-color: #8bb79a; background: #eef8f0; }.officer-approved-item span { color: #36734a; font-size: 10px; font-weight: 800; letter-spacing: .07em; }.officer-approved-item strong { font-size: 14px; }.officer-approved-item small { color: var(--cp-admin-muted); font-size: 12px; }.officer-approved-item em { grid-row: span 2; align-self: center; color: #36734a; font-size: 10px; font-style: normal; font-weight: 850; letter-spacing: .06em; }.officer-readonly-note { margin: 20px 0 0; padding: 13px; border: 1px solid #dce7dd; border-radius: 11px; background: #f7fcf8; color: #36734a; font-size: 13px; line-height: 1.5; }
+@media (max-width: 850px) { .credit-officer-content { width: calc(100% - 28px); }.officer-summary-grid, .officer-workspace { grid-template-columns: 1fr; }.issued-card-summary dl { grid-template-columns: 1fr; } }
+
+.login-page,
+.register-page { background: linear-gradient(145deg, #061222 0%, #0a1b33 50%, #102b50 100%) !important; }
+.login-card,
+.register-card {
+  border-color: rgba(255, 255, 255, .72) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, .97) !important;
+  box-shadow: 0 30px 75px rgba(0, 0, 0, .28) !important;
+}
+
+@media (max-width: 650px) {
+  .customer-dashboard-header,
+  .product-header,
+  .staff-dashboard-page > header,
+  .admin-dashboard-header { min-height: 68px; }
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.5),
+       (min-resolution: 144dpi),
+       (min-resolution: 1.5dppx) {
+
+  .demo-appheader-avatar:before {
+    content: url("images/avatar_24px_2x.png");
+    transform: translate(-25%, -25%) scale(0.5);
+  }
+}

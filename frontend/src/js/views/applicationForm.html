@@ -1,0 +1,48 @@
+<div class="customer-dashboard-page application-shell">
+  <header class="customer-dashboard-header">
+    <div class="customer-brand"><div class="customer-brand-mark">CP</div><div class="customer-brand-text"><h1>CredPulse</h1><span>Credit Card Portal</span></div></div>
+    <button class="customer-logout-button" data-bind="click: back">Save &amp; return</button>
+  </header>
+  <main class="application-page application-page-connected">
+    <form class="application-form" data-bind="submit: saveDraft">
+      <div class="application-form-heading"><p class="customer-eyebrow">CREDIT CARD APPLICATION</p><h2>Complete your application</h2><p data-bind="text: 'Step ' + currentStep() + ' of 2'"></p></div>
+      <div class="customer-dashboard-error" role="alert" data-bind="visible: errorMessage, text: errorMessage"></div>
+      <p class="form-success" role="status" data-bind="visible: successMessage, text: successMessage"></p>
+
+      <div data-bind="visible: currentStep() === 1">
+        <fieldset><legend>Personal details</legend><label>Date of birth<input required type="date" data-bind="value: dateOfBirth"></label><label>Gender<select required data-bind="value: gender"><option value="">Select</option><option>MALE</option><option>FEMALE</option><option>OTHER</option></select></label><label>Marital status<select required data-bind="value: maritalStatus"><option value="">Select</option><option>SINGLE</option><option>MARRIED</option><option>DIVORCED</option><option>WIDOWED</option></select></label></fieldset>
+        <fieldset><legend>Address</legend><label>Address line 1<input required data-bind="value: addressLine1"></label><label>Address line 2<input data-bind="value: addressLine2"></label><label>City<input required data-bind="value: city"></label><label>State<input required data-bind="value: state"></label><label>Postal code<input required data-bind="value: postalCode"></label><label>Country<input required data-bind="value: country"></label></fieldset>
+        <fieldset><legend>Employment &amp; finances</legend><label>Employment type<select required data-bind="value: employmentType"><option value="">Select</option><option>SALARIED</option><option>SELF_EMPLOYED</option><option>BUSINESS_OWNER</option><option>RETIRED</option><option>STUDENT</option><option>OTHER</option></select></label><label>Employer name<input data-bind="value: employerName"></label><label>Designation<input data-bind="value: designation"></label><label>Annual income<input required type="number" min="0" data-bind="value: annualIncome"></label><label>Monthly expenses<input required type="number" min="0" data-bind="value: monthlyExpenses"></label><label>Existing loans<input type="number" min="0" data-bind="value: existingLoanAmount"></label><label>Existing EMI<input type="number" min="0" data-bind="value: existingEmiAmount"></label><label>Other income<input type="number" min="0" data-bind="value: otherIncome"></label><label>Requested limit<input required type="number" min="1" data-bind="value: requestedCreditLimit"></label></fieldset>
+        <section class="application-declarations application-declarations-step-one">
+          <p class="customer-eyebrow">DECLARATION &amp; CONSENT</p>
+          <p class="application-declaration-copy">Please confirm these declarations before saving your personal information.</p>
+          <label class="checkbox"><input type="checkbox" data-bind="checked: consentGiven"> I consent to the processing of my application information.</label>
+          <label class="checkbox"><input type="checkbox" data-bind="checked: declarationAccepted"> I confirm the information provided is accurate.</label>
+        </section>
+        <div class="form-actions"><button type="button" class="product-action" data-bind="click: continueToDocuments, disable: isSaving">Save &amp; continue</button></div>
+      </div>
+
+      <div data-bind="visible: currentStep() === 2">
+        <section class="document-upload-section">
+          <p class="customer-eyebrow">STEP 2 &mdash; DOCUMENTS</p><h3>Upload verification documents</h3>
+          <div class="document-grid" data-bind="foreach: requiredDocuments">
+            <article class="document-slot">
+              <div class="document-slot-details"><strong data-bind="text: label"></strong><span data-bind="text: hint"></span>
+                <div class="document-preview" data-bind="with: $parent.documentForType(type)">
+                  <span class="document-pdf">PDF</span>
+                  <div><strong data-bind="text: originalFileName"></strong><span data-bind="text: displaySize"></span></div>
+                  <span class="document-selected" data-bind="visible: selected">Selected</span>
+                  <span class="document-saved" data-bind="visible: !selected">Uploaded</span>
+                  <a class="document-preview-button" target="_blank" rel="noopener" data-bind="visible: previewUrl, attr: { href: previewUrl }">Open preview</a>
+                  <button type="button" class="document-discard" aria-label="Remove selected document" title="Remove selected document" data-bind="visible: selected, click: $root.discardDocument">&times;</button>
+                </div>
+              </div>
+              <label class="document-picker"><input type="file" accept="application/pdf,.pdf" data-bind="event: { change: function(data, event) { $parent.selectDocument(type, data, event); } }"><span data-bind="text: $parent.documentForType(type) ? 'Replace PDF' : 'Choose PDF'"></span></label>
+            </article>
+          </div>
+        </section>
+        <div class="form-actions"><button type="button" data-bind="click: previousStep, disable: isSaving">Back</button><button type="button" class="product-action" data-bind="click: submit, disable: isSaving">Submit application</button></div>
+      </div>
+    </form>
+  </main>
+</div>

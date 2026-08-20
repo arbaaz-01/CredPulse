@@ -1,6 +1,8 @@
 define([
     'knockout',
     '../services/adminService',
+    '../services/ragService',
+    '../components/ragChatbot',
     '../services/authService',
     '../utils/storage',
     '../utils/constants',
@@ -9,6 +11,8 @@ define([
 ], function (
     ko,
     adminService,
+    ragService,
+    ragChatbot,
     authService,
     storage,
     constants,
@@ -86,6 +90,23 @@ define([
 
         self.successMessage =
             ko.observable('');
+
+        Object.assign(self, ragChatbot.create());
+        self.isRagIngesting = ko.observable(false);
+        self.ragKnowledgeMessage = ko.observable('');
+        self.isRagKnowledgeError = ko.observable(false);
+        self.ingestRagKnowledge = async function () {
+            if (self.isRagIngesting()) { return; }
+            self.isRagIngesting(true);
+            try {
+                const result = await ragService.ingest();
+                const counts = result && result.documentsProcessed !== undefined && result.chunksIndexed !== undefined ? ' ' + result.documentsProcessed + ' files and ' + result.chunksIndexed + ' chunks indexed.' : '';
+                self.isRagKnowledgeError(false); self.ragKnowledgeMessage('Knowledge base refreshed successfully.' + counts);
+                window.setTimeout(function () { self.ragKnowledgeMessage(''); }, 6000);
+            } catch (error) {
+                self.isRagKnowledgeError(true); self.ragKnowledgeMessage(errorMessages.forRequest(error, 'Could not refresh the knowledge base. Please try again.'));
+            } finally { self.isRagIngesting(false); }
+        };
 
 
         // =====================================================

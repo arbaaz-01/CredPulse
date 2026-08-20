@@ -75,6 +75,11 @@ define([], function () {
             USERS: '/admin/users'
         },
 
+        RAG: {
+            CHAT: '/rag/chat',
+            INGEST: '/rag/admin/ingest'
+        },
+
 
         // -----------------------------------------------------
         // CARDS

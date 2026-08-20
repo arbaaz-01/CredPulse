@@ -656,5 +656,13 @@
         </section>
 
     </main>
+    <button type="button" class="rag-chat-launcher" data-bind="click: openChat" aria-label="Open CredPulse AI Assistant">💬 <span>CredPulse AI</span></button>
+    <aside class="rag-chat-drawer" data-bind="css: { 'rag-chat-drawer-open': isChatOpen }" aria-label="CredPulse AI Assistant">
+        <header class="rag-chat-header"><h3>CredPulse AI Assistant</h3><button type="button" data-bind="click: closeChat" aria-label="Close assistant">×</button></header>
+        <section class="rag-knowledge-control"><p>RAG KNOWLEDGE BASE</p><button type="button" data-bind="click: ingestRagKnowledge, disable: isRagIngesting, text: isRagIngesting() ? 'Refreshing...' : 'Refresh Knowledge Base'"></button><small data-bind="visible: ragKnowledgeMessage, text: ragKnowledgeMessage, css: { 'rag-knowledge-error': isRagKnowledgeError }"></small></section>
+        <div class="rag-chat-messages" data-bind="foreach: chatMessages"><article class="rag-chat-message" data-bind="css: { 'rag-chat-user': role === 'user', 'rag-chat-assistant': role !== 'user', 'rag-chat-thinking': thinking }"><div data-bind="if: role === 'user'"><p data-bind="text: text"></p></div><div data-bind="if: role !== 'user'"><div class="rag-chat-markdown" data-bind="html: $parent.renderAssistantMessage($data)"></div><small data-bind="visible: disclaimer, text: disclaimer"></small></div></article></div>
+        <div class="rag-chat-empty" data-bind="visible: chatMessages().length === 0">Ask about a CredPulse card.</div>
+        <div class="rag-chat-input"><textarea rows="2" placeholder="Ask about a CredPulse card..." data-bind="value: chatInput, valueUpdate: 'input', event: { keydown: sendChatOnEnter }, disable: isChatSending"></textarea><button type="button" data-bind="click: sendChat, disable: isChatSending() || !chatInput().trim(), text: isChatSending() ? 'Sending...' : 'Send'"></button></div>
+    </aside>
 
 </div>

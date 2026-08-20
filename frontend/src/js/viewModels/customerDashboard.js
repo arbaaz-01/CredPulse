@@ -1,4 +1,4 @@
-define(['knockout', '../services/userService', '../services/productService', '../services/applicationService', '../services/cardService', '../services/authService', '../utils/storage', '../utils/constants', '../utils/errorMessages', 'ojs/ojrouter'], function (ko, userService, productService, applicationService, cardService, authService, storage, constants, errorMessages, Router) {
+define(['knockout', '../services/userService', '../services/productService', '../services/applicationService', '../services/cardService', '../components/ragChatbot', '../services/authService', '../utils/storage', '../utils/constants', '../utils/errorMessages', 'ojs/ojrouter'], function (ko, userService, productService, applicationService, cardService, ragChatbot, authService, storage, constants, errorMessages, Router) {
     'use strict';
     function CustomerDashboardViewModel() {
         const self = this;
@@ -19,6 +19,7 @@ define(['knockout', '../services/userService', '../services/productService', '..
         self.viewApplication = function (application) { return Router.rootInstance.go('applicationDetails/' + encodeURIComponent(application.id)); };
         self.viewCard = function (card) { return Router.rootInstance.go('cardDetails/' + encodeURIComponent(card.id)); };
         self.startPrimaryProduct = function () { const product = self.primaryProduct(); return product ? self.openProduct(product) : null; };
+        Object.assign(self, ragChatbot.create());
         self.logout = async function () { await authService.logout(); await Router.rootInstance.go('login'); };
         self.loadDashboard = async function () {
             self.isLoading(true); self.errorMessage('');

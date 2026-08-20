@@ -245,4 +245,10 @@ public class CreditCardApplication {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+        @Column(
+                name = "REMARKS",
+                length = 500
+        )
+         private String remarks;
 }

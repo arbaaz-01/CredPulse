@@ -1,183 +1,196 @@
 package com.ofss.project.service;
 
+import com.ofss.project.dto.request.ApplicationRejectRequest;
 import com.ofss.project.dto.request.RiskAssessment;
 import com.ofss.project.dto.response.ApplicationRiskResponse;
 import com.ofss.project.dto.response.ApplicationDocumentResponse;
 import com.ofss.project.dto.response.CardIssuanceResponse;
+import com.ofss.project.entity.ApplicationStatusHistory;
 import com.ofss.project.entity.ApplicationDocument;
 import com.ofss.project.entity.CreditCardApplication;
+import com.ofss.project.entity.User;
 import com.ofss.project.enums.ApplicationStatus;
+import com.ofss.project.repository.ApplicationStatusHistoryRepository;
 import com.ofss.project.repository.CreditCardApplicationRepository;
+import com.ofss.project.repository.UserRepository;
 import com.ofss.project.repository.ApplicationDocumentRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CreditOfficerService {
 
-    private final CreditCardApplicationRepository applicationRepository;
-    private final ApplicationDocumentRepository documentRepository;
-    private final CreditRiskService creditRiskService;
-    private final CreditCardService creditCardService;
-   
+        private final CreditCardApplicationRepository applicationRepository;
+        private final ApplicationDocumentRepository documentRepository;
+        private final CreditRiskService creditRiskService;
+        private final CreditCardService creditCardService;
+        private final UserRepository userRepository;
+        private final ApplicationStatusHistoryRepository statusHistoryRepository;
 
-    public List<ApplicationRiskResponse> getAllApplications() {
+        public List<ApplicationRiskResponse> getAllApplications() {
 
-        return applicationRepository
-                .findByStatusIn(
-                        List.of(
-                                ApplicationStatus.SUBMITTED,
-                                ApplicationStatus.UNDER_REVIEW,
-                                ApplicationStatus.APPROVED
-                        )
-                )
-                .stream()
-                .map(this::toRiskResponse)
-                .toList();
-    }
+                return applicationRepository
+                                .findByStatusIn(
+                                                List.of(
+                                                                ApplicationStatus.SUBMITTED,
+                                                                ApplicationStatus.UNDER_REVIEW,
+                                                                ApplicationStatus.APPROVED))
+                                .stream()
+                                .map(this::toRiskResponse)
+                                .toList();
 
-    public ApplicationRiskResponse getApplicationDetails(Long id) {
+        }
 
-        CreditCardApplication application =
-                applicationRepository.findByIdAndStatusNot(
-                            id,
-                            ApplicationStatus.DRAFT
-                    ) .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Application not found: " + id
-                                ));
+        public ApplicationRiskResponse getApplicationDetails(Long id) {
 
-        return toRiskResponse(application);
-    }
+                CreditCardApplication application = applicationRepository.findByIdAndStatusNot(
+                                id,
+                                ApplicationStatus.DRAFT).orElseThrow(
+                                                () -> new RuntimeException(
+                                                                "Application not found: " + id));
 
-    public List<ApplicationDocumentResponse> getApplicationDocuments(Long applicationId) {
+                return toRiskResponse(application);
+        }
 
-        getOfficerAccessibleApplication(applicationId);
+        public List<ApplicationDocumentResponse> getApplicationDocuments(Long applicationId) {
 
-        return documentRepository
-                .findByApplication_IdOrderByUploadedAtAsc(applicationId)
-                .stream()
-                .map(this::toDocumentResponse)
-                .toList();
-    }
+                getOfficerAccessibleApplication(applicationId);
 
-    public CardIssuanceResponse approveApplication(Long id) {
+                return documentRepository
+                                .findByApplication_IdOrderByUploadedAtAsc(applicationId)
+                                .stream()
+                                .map(this::toDocumentResponse)
+                                .toList();
+        }
 
-    CreditCardApplication application =
-            getDecisionReadyApplication(id);
+        public CardIssuanceResponse approveApplication(Long id) {
 
-    RiskAssessment assessment =
-            creditRiskService.evaluate(application);
+                CreditCardApplication application = getDecisionReadyApplication(id);
+                // CreditCardApplication application = getOfficerAccessibleApplication(id);
 
-    if (!"APPROVE".equals(assessment.recommendation())) {
-        throw new IllegalStateException(
-                "Application does not meet approval criteria"
-        );
-    }
+                RiskAssessment assessment = creditRiskService.evaluate(application);
 
-    application.setStatus(
-            ApplicationStatus.APPROVED
-    );
+                if (!"APPROVE".equals(assessment.recommendation())) {
+                        throw new IllegalStateException(
+                                        "Application does not meet approval criteria");
+                }
 
-    applicationRepository.save(application);
-
-    return creditCardService.issueCard(
-            application,
-            assessment.recommendedLimit()
-    );
-}
-
-        public void rejectApplication(Long id) {
-
-                CreditCardApplication application =
-                        getDecisionReadyApplication(id);
-
-                application.setStatus(ApplicationStatus.REJECTED);
+                application.setStatus(
+                                ApplicationStatus.APPROVED);
 
                 applicationRepository.save(application);
+
+                return creditCardService.issueCard(
+                                application,
+                                assessment.recommendedLimit());
         }
 
-   private ApplicationRiskResponse toRiskResponse(
-                 CreditCardApplication application
-        ) {
+        @Transactional
+        public void rejectApplication(
+                        Long id,
+                        Long officerUserId,
+                        String remark) {
 
-                RiskAssessment assessment =
-                        creditRiskService.evaluate(application);
+                CreditCardApplication application = getDecisionReadyApplication(id);
+                // CreditCardApplication application = getOfficerAccessibleApplication(id);
+
+                User officer = userRepository.findById(officerUserId)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Officer user not found"));
+
+                ApplicationStatus oldStatus = application.getStatus();
+
+                application.setStatus(
+                                ApplicationStatus.REJECTED);
+
+                application.setRemarks(
+                                remark.trim());
+
+                applicationRepository.save(application);
+
+                ApplicationStatusHistory history = ApplicationStatusHistory.builder()
+                                .application(application)
+                                .oldStatus(oldStatus)
+                                .newStatus(ApplicationStatus.REJECTED)
+                                .changedBy(officer)
+                                .remarks(remark.trim())
+                                .build();
+
+                statusHistoryRepository.save(history);
+        }
+
+        private ApplicationRiskResponse toRiskResponse(
+                        CreditCardApplication application) {
+
+                RiskAssessment assessment = creditRiskService.evaluate(application);
 
                 return new ApplicationRiskResponse(
-                        application.getId(),
-                        application.getApplicationNumber(),
-                        application.getStatus(),
+                                application.getId(),
+                                application.getApplicationNumber(),
+                                application.getStatus(),
 
-                        application.getUser().getName(),
+                                application.getUser().getName(),
 
-                        application.getDateOfBirth(),
+                                application.getDateOfBirth(),
 
-                        application.getEmploymentType() != null
-                                ? application.getEmploymentType().name()
-                                : null,
+                                application.getEmploymentType() != null
+                                                ? application.getEmploymentType().name()
+                                                : null,
 
-                        application.getEmployerName(),
+                                application.getEmployerName(),
 
-                        application.getAnnualIncome(),
-                        application.getMonthlyExpenses(),
-                        application.getExistingLoanAmount(),
-                        application.getExistingEmiAmount(),
-                        application.getOtherIncome(),
+                                application.getAnnualIncome(),
+                                application.getMonthlyExpenses(),
+                                application.getExistingLoanAmount(),
+                                application.getExistingEmiAmount(),
+                                application.getOtherIncome(),
 
-                        application.getRequestedCreditLimit(),
+                                application.getRequestedCreditLimit(),
 
-                        assessment
-                );
+                                assessment);
         }
 
-   private ApplicationDocumentResponse toDocumentResponse(
-           ApplicationDocument document
-   ) {
+        private ApplicationDocumentResponse toDocumentResponse(
+                        ApplicationDocument document) {
 
-       return new ApplicationDocumentResponse(
-               document.getId(),
-               document.getDocumentType(),
-               document.getOriginalFileName(),
-               document.getContentType(),
-               document.getFileSize(),
-               document.getVerificationStatus(),
-               document.getUploadedAt(),
-               document.getVerifiedAt()
-       );
-   }
-
-private CreditCardApplication getOfficerAccessibleApplication(Long id) {
-
-        return applicationRepository
-                .findByIdAndStatusNot(
-                        id,
-                        ApplicationStatus.DRAFT
-                )
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Application not found or still in draft"
-                        )
-                );
+                return new ApplicationDocumentResponse(
+                                document.getId(),
+                                document.getDocumentType(),
+                                document.getOriginalFileName(),
+                                document.getContentType(),
+                                document.getFileSize(),
+                                document.getVerificationStatus(),
+                                document.getUploadedAt(),
+                                document.getVerifiedAt());
         }
 
-private CreditCardApplication getDecisionReadyApplication(Long id) {
+        private CreditCardApplication getOfficerAccessibleApplication(Long id) {
 
-        CreditCardApplication application = getOfficerAccessibleApplication(id);
-
-        if (application.getStatus() != ApplicationStatus.SUBMITTED
-                && application.getStatus() != ApplicationStatus.UNDER_REVIEW) {
-
-            throw new IllegalStateException(
-                    "Only submitted applications can be approved or rejected"
-            );
+                return applicationRepository
+                                .findByIdAndStatusNot(
+                                                id,
+                                                ApplicationStatus.DRAFT)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Application not found or still in draft"));
         }
 
-        return application;
-}
+        private CreditCardApplication getDecisionReadyApplication(Long id) {
+
+                CreditCardApplication application = getOfficerAccessibleApplication(id);
+
+                if (application.getStatus() != ApplicationStatus.SUBMITTED
+                                && application.getStatus() != ApplicationStatus.UNDER_REVIEW) {
+
+                        throw new IllegalStateException(
+                                        "Only submitted applications can be approved or rejected");
+                }
+
+                return application;
+        }
 }

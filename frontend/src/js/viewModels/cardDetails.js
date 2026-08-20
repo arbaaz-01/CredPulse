@@ -53,6 +53,9 @@ define([
         self.errorMessage =
             ko.observable('');
 
+        self.showFullCardNumber =
+            ko.observable(false);
+
 
         // =====================================================
         // USER NAME
@@ -311,6 +314,33 @@ define([
                     card.cardLastFour
                 );
             });
+
+        self.displayCardNumber =
+            ko.pureComputed(function () {
+
+                const card = self.card();
+
+                if (!card) {
+                    return '•••• •••• •••• ••••';
+                }
+
+                if (self.showFullCardNumber() && card.cardNumber) {
+                    return String(card.cardNumber)
+                        .replace(/\s/g, '')
+                        .replace(/(.{4})/g, '$1 ')
+                        .trim();
+                }
+
+                return card.maskedCardNumber || self.maskedCardNumber();
+            });
+
+        self.toggleCardNumber =
+            function () {
+                const card = self.card();
+                if (card && card.cardNumber) {
+                    self.showFullCardNumber(!self.showFullCardNumber());
+                }
+            };
 
 
         // =====================================================
@@ -697,6 +727,8 @@ define([
                             response
                         )
                     );
+
+                    self.showFullCardNumber(false);
 
 
                 } catch (error) {

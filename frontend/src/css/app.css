@@ -6,6 +6,7 @@
 @import url("register.css");
 @import url("./customerDashboard.css");
 @import url("./customerFlows.css");
+@import url("./cardDetails.css");
 @import url("./staffDashboard.css");
 @import url("./adminDashboard.css");
 
@@ -811,19 +812,28 @@ html[dir="rtl"] .demo-oracle-icon {
 @media (max-width: 700px) { .application-detail-card { padding: 21px 16px; }.application-detail-heading, .document-review-list article { align-items: flex-start; flex-direction: column; }.application-review-grid { grid-template-columns: 1fr; }.document-review-list .product-action { width: 100%; } }
 
 .issued-cards-section { border-color: #d9e2f0 !important; }
-.issued-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
-.issued-card-summary { padding: 20px; border: 1px solid #dbe4f0; border-radius: 14px; background: linear-gradient(140deg, #f9fbff, #edf4ff); }
-.issued-card-summary h4 { margin: 8px 0 3px; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 23px; font-weight: 500; letter-spacing: .04em; }
-.issued-card-summary p { margin: 0; color: var(--cp-admin-muted); font-size: 13px; }
-.issued-card-summary dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0; }
-.issued-card-summary dl div { min-width: 0; }.issued-card-summary dt { color: var(--cp-admin-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; }.issued-card-summary dd { margin: 5px 0 0; color: var(--cp-admin-ink); font-size: 13px; font-weight: 750; }
+.issued-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 420px)); gap: 22px; }
+.issued-card-summary { overflow: hidden; border: 1px solid #dbe4f0; border-radius: 19px; background: #fff; box-shadow: 0 12px 25px rgba(10, 37, 84, .07); }
+.issued-payment-card { position: relative; min-height: 243px; padding: 24px 26px 22px; overflow: hidden; color: #fff; border-radius: 18px 18px 0 0; background: radial-gradient(circle at 95% 9%, rgba(224, 105, 57, .72), transparent 30%), radial-gradient(circle at 12% 105%, rgba(69, 102, 202, .8), transparent 44%), linear-gradient(128deg, #071c4d 0%, #123a89 52%, #0a225b 100%); box-shadow: inset 0 1px rgba(255,255,255,.2); }
+.issued-card-glow { position: absolute; width: 235px; height: 235px; top: -125px; right: -74px; border: 1px solid rgba(255,255,255,.17); border-radius: 50%; box-shadow: 0 0 0 28px rgba(255,255,255,.035), 0 0 0 62px rgba(255,255,255,.025); }
+.issued-card-topline, .issued-card-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; }
+.issued-card-topline > strong { font-family: var(--cp-display-font); font-size: 25px; letter-spacing: -.02em; }
+.issued-card-status { padding: 5px 9px; border: 1px solid rgba(255,255,255,.24); border-radius: 100px; background: rgba(255,255,255,.13); font-size: 9px; font-weight: 800; letter-spacing: .1em; }
+.issued-card-chip { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, 1fr); width: 45px; height: 34px; margin-top: 30px; overflow: hidden; border: 1px solid #b58b35; border-radius: 7px; background: linear-gradient(135deg, #f9df92, #bd8c27); }
+.issued-card-chip i { border: solid rgba(89, 58, 14, .42); border-width: 0 1px 1px 0; }
+.issued-card-contactless { position: absolute; z-index: 1; top: 88px; left: 88px; display: flex; align-items: center; gap: 3px; transform: rotate(90deg); }
+.issued-card-contactless span { display: block; width: 7px; height: 12px; border: 2px solid rgba(255,255,255,.88); border-top: 0; border-bottom: 0; border-left: 0; border-radius: 50%; }
+.issued-card-contactless span:nth-child(2) { height: 18px; }.issued-card-contactless span:nth-child(3) { height: 24px; }
+.issued-card-number { position: relative; z-index: 1; margin: 27px 0 20px !important; color: #fff !important; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(20px, 4vw, 25px) !important; font-weight: 600; letter-spacing: .11em; text-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.issued-card-bottom small { display: block; margin-bottom: 5px; color: rgba(255,255,255,.67); font-size: 8px; font-weight: 800; letter-spacing: .1em; }.issued-card-bottom strong { display: block; max-width: 160px; overflow: hidden; color: #fff; font-size: 12px; letter-spacing: .04em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }.issued-card-bottom b { align-self: end; color: #fff; font-family: var(--cp-display-font); font-size: 25px; font-style: italic; }
+.issued-card-account { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 17px 20px 19px; }.issued-card-limit span, .issued-card-limit small { display: block; color: var(--cp-admin-muted); font-size: 11px; font-weight: 700; }.issued-card-limit strong { display: block; margin: 4px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 25px; font-weight: 500; }.issued-card-limit small { font-size: 10px; font-weight: 500; }.issued-card-account .product-action { flex: 0 0 auto; padding: 11px 14px; font-size: 12px; }.issued-card-account .product-action span { margin-left: 4px; font-size: 16px; }
 
 .credit-officer-content { width: min(1320px, calc(100% - 48px)); margin: 0 auto; padding: 32px 0 70px; }
 .officer-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }.officer-summary-grid article { padding: 20px; border: 1px solid var(--cp-admin-line); border-radius: 16px; background: #fff; box-shadow: var(--cp-admin-shadow); }.officer-summary-grid span { color: var(--cp-admin-muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }.officer-summary-grid strong { display: block; margin: 8px 0 4px; color: var(--cp-admin-accent); font-family: var(--cp-display-font); font-size: 36px; font-weight: 500; }.officer-summary-grid p { margin: 0; color: var(--cp-admin-muted); font-size: 12px; }
 .officer-workspace { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(0, 1.2fr); gap: 20px; margin-top: 22px; }.officer-queue, .officer-detail { padding: 24px; border: 1px solid var(--cp-admin-line); border-radius: 16px; background: #fff; box-shadow: var(--cp-admin-shadow); }.officer-queue-list { display: grid; gap: 9px; margin-top: 18px; }.officer-queue-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; width: 100%; padding: 14px; border: 1px solid #e3e9f2; border-radius: 12px; background: #fbfdff; color: var(--cp-admin-ink); cursor: pointer; text-align: left; }.officer-queue-item:hover, .officer-queue-item.is-selected { border-color: rgba(201,83,45,.55); background: #fff7f3; }.officer-queue-item span { color: var(--cp-admin-accent); font-size: 10px; font-weight: 800; letter-spacing: .07em; }.officer-queue-item strong { font-size: 14px; }.officer-queue-item small { color: var(--cp-admin-muted); font-size: 12px; }.officer-queue-item em { grid-row: span 2; align-self: center; color: var(--cp-admin-heading); font-size: 11px; font-style: normal; font-weight: 800; }
 .officer-detail-heading { display: flex; justify-content: space-between; gap: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--cp-admin-line); }.officer-detail h2 { margin: 5px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 29px; font-weight: 500; }.officer-detail-heading > div > span { color: var(--cp-admin-muted); font-size: 12px; font-weight: 700; }.officer-detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; margin: 20px 0; }.officer-detail-grid div { padding: 13px; border: 1px solid #e3e9f2; border-radius: 11px; background: #fbfdff; }.officer-detail-grid span { display: block; color: var(--cp-admin-muted); font-size: 11px; }.officer-detail-grid strong { display: block; margin-top: 5px; color: var(--cp-admin-ink); font-size: 15px; }.officer-risk-note { margin: 0; padding: 13px; border-left: 3px solid var(--cp-admin-accent); background: #fff7f3; color: #5b4a45; font-size: 13px; line-height: 1.55; }.officer-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }.officer-reject { padding: 10px 15px; border: 1px solid #d6deea; border-radius: 10px; background: #fff; color: var(--cp-admin-heading); cursor: pointer; font-weight: 750; }.officer-detail .staff-backend-notice { margin-top: 20px; }.officer-detail-empty { display: flex; flex-direction: column; justify-content: center; min-height: 320px; color: var(--cp-admin-muted); }
 .officer-approved-heading { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--cp-admin-line); }.officer-approved-heading h3 { margin: 5px 0; color: var(--cp-admin-heading); font-family: var(--cp-display-font); font-size: 22px; font-weight: 500; }.officer-approved-heading p:last-child { margin: 0; color: var(--cp-admin-muted); font-size: 12px; }.officer-approved-list { display: grid; gap: 9px; margin-top: 15px; }.officer-approved-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; width: 100%; padding: 14px; border: 1px solid #dce7dd; border-radius: 12px; background: #f7fcf8; color: var(--cp-admin-ink); cursor: pointer; text-align: left; }.officer-approved-item:hover, .officer-approved-item.is-selected { border-color: #8bb79a; background: #eef8f0; }.officer-approved-item span { color: #36734a; font-size: 10px; font-weight: 800; letter-spacing: .07em; }.officer-approved-item strong { font-size: 14px; }.officer-approved-item small { color: var(--cp-admin-muted); font-size: 12px; }.officer-approved-item em { grid-row: span 2; align-self: center; color: #36734a; font-size: 10px; font-style: normal; font-weight: 850; letter-spacing: .06em; }.officer-readonly-note { margin: 20px 0 0; padding: 13px; border: 1px solid #dce7dd; border-radius: 11px; background: #f7fcf8; color: #36734a; font-size: 13px; line-height: 1.5; }
-@media (max-width: 850px) { .credit-officer-content { width: calc(100% - 28px); }.officer-summary-grid, .officer-workspace { grid-template-columns: 1fr; }.issued-card-summary dl { grid-template-columns: 1fr; } }
+@media (max-width: 850px) { .credit-officer-content { width: calc(100% - 28px); }.officer-summary-grid, .officer-workspace { grid-template-columns: 1fr; }.issued-card-grid { grid-template-columns: minmax(0, 1fr); }.issued-card-account { flex-wrap: wrap; } }
 
 .login-page,
 .register-page { background: linear-gradient(145deg, #061222 0%, #0a1b33 50%, #102b50 100%) !important; }
@@ -850,4 +860,50 @@ html[dir="rtl"] .demo-oracle-icon {
     content: url("images/avatar_24px_2x.png");
     transform: translate(-25%, -25%) scale(0.5);
   }
+}
+
+
+/* ============================================================
+   GLOBAL TYPOGRAPHY CONTRACT
+   Inter is the functional banking typeface; Georgia is reserved
+   for customer-facing headings and important financial figures.
+   New views inherit these rules automatically through app.css.
+   ============================================================ */
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--cp-body-font) !important;
+}
+
+body {
+  color: var(--cp-admin-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Keep product names, page titles and financial emphasis consistent without
+   turning navigation, labels or form controls into a display typeface. */
+main :where(h1, h2, h3),
+.customer-cards-header h3,
+.card-details-heading h2,
+.card-details-section-title h3,
+.card-information-panel h3,
+.card-lifecycle-preview h3,
+.staff-dashboard-page h1,
+.staff-dashboard-page h2,
+.admin-dashboard-content h2,
+.admin-dashboard-content h3 {
+  font-family: var(--cp-display-font) !important;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+
+/* Monetary values and dashboard figures share the same deliberate rhythm. */
+:where(.customer-summary-value, .admin-summary-value, .issued-card-limit strong,
+       .card-available-amount strong, .card-detail-metric strong,
+       .officer-summary-grid strong) {
+  font-family: var(--cp-display-font) !important;
 }

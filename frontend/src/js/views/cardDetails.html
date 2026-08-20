@@ -265,25 +265,32 @@
 
                         <div class="real-card-number">
 
-                            <span>
+                            <span data-bind="visible: !$parent.showFullCardNumber()">
                                 ••••
                             </span>
 
-                            <span>
+                            <span data-bind="visible: !$parent.showFullCardNumber()">
                                 ••••
                             </span>
 
-                            <span>
+                            <span data-bind="visible: !$parent.showFullCardNumber()">
                                 ••••
                             </span>
 
                             <span
                                 class="real-card-last-four"
-                                data-bind="text: cardLastFour">
+                                data-bind="text: $parent.showFullCardNumber() ? $parent.displayCardNumber() : cardLastFour">
 
                                 0000
 
                             </span>
+
+                            <button
+                                type="button"
+                                class="card-number-visibility-toggle"
+                                data-bind="click: $parent.toggleCardNumber, visible: cardNumber, attr: { 'aria-label': $parent.showFullCardNumber() ? 'Hide full card number' : 'Show full card number', 'aria-pressed': $parent.showFullCardNumber() }">
+                                <span aria-hidden="true">&#128065;</span>
+                            </button>
 
                         </div>
 
@@ -320,18 +327,8 @@
 
                                 <strong>
 
-                                    <span data-bind="
-                                        text:
-                                            String(expiryMonth || '')
-                                                .padStart(2, '0')
-                                    ">
-                                        00
-                                    </span>
-
-                                    /
-
-                                    <span data-bind="text: expiryYear">
-                                        0000
+                                    <span data-bind="text: $parent.formattedExpiry">
+                                        00/00
                                     </span>
 
                                 </strong>

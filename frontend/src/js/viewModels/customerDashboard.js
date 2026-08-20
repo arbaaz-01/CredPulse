@@ -11,6 +11,7 @@ define(['knockout', '../services/userService', '../services/productService', '..
         self.primaryProduct = ko.pureComputed(function () { return self.products()[0] || null; });
         self.primaryDraft = ko.pureComputed(function () { return self.applications().find(function (application) { return application.status === 'DRAFT'; }) || null; });
         self.formatCurrency = function (value) { return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(value || 0)); };
+        self.formatExpiry = function (month, year) { return String(month || '').padStart(2, '0') + ' / ' + String(year || '').slice(-2); };
         self.formatStatus = function (status) { return (status || '').replace(/_/g, ' '); };
         self.productTheme = function (product) { return Number(product.id || 0) % 3 === 0 ? 'bank-card-icici' : Number(product.id || 0) % 2 === 0 ? 'bank-card-hdfc' : 'bank-card-default'; };
         self.openProduct = function (product) { return Router.rootInstance.go('productDetails/' + encodeURIComponent(product.id)); };

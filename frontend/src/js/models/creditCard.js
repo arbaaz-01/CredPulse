@@ -20,8 +20,22 @@ define([], function () {
             data.id || null;
 
 
+        /* The issued-card API returns maskedCardNumber (for example
+           "**** **** **** 2852"), while older demo data uses cardLastFour.
+           Derive the last four from the masked value; never use cardNumber. */
         this.cardLastFour =
-            data.cardLastFour || '';
+            data.cardLastFour ||
+            String(data.maskedCardNumber || '')
+                .replace(/\D/g, '')
+                .slice(-4);
+
+        this.maskedCardNumber =
+            data.maskedCardNumber ||
+            ('**** **** **** ' + this.cardLastFour);
+
+        // Kept hidden in the UI until the authenticated cardholder requests it.
+        this.cardNumber =
+            data.cardNumber || '';
 
 
         this.cardHolderName =

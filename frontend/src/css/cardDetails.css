@@ -212,6 +212,46 @@
         clamp(20px, 2.5vw, 27px);
 }
 
+/* The details card is wider than the catalogue card. Keep the number in its
+   own visual lane and anchor the ownership details to the bottom edge. */
+.card-details-physical-card .real-card-number {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: clamp(38px, 6vw, 68px);
+    padding-bottom: 74px;
+    white-space: nowrap;
+}
+
+.card-details-physical-card .real-card-number .real-card-last-four {
+    flex: 1 1 auto;
+}
+
+.card-number-visibility-toggle {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .32);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, .12);
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    line-height: 1;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.card-number-visibility-toggle:hover { background: rgba(255, 255, 255, .22); transform: translateY(-1px); }
+.card-number-visibility-toggle:focus-visible { outline: 3px solid rgba(255, 255, 255, .72); outline-offset: 3px; }
+
+.card-details-physical-card .real-card-meta {
+    bottom: clamp(24px, 3vw, 36px);
+}
+
 
 /* =========================================================
    CARD SECURITY NOTICE

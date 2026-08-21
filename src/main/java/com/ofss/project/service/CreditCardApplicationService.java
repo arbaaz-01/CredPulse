@@ -36,6 +36,8 @@ public class CreditCardApplicationService {
     private final ApplicationStatusHistoryRepository historyRepository;
     private final UserRepository userRepository;
     private final CurrentUser currentUser;
+    private final NotificationService notificationService;
+    
 
     @Transactional
     public CreditCardApplicationResponse createDraft(
@@ -245,6 +247,8 @@ public class CreditCardApplicationService {
                 application.getUser(),
                 "Application submitted by user"
         );
+        
+        notificationService.createApplicationSubmittedNotification(application);
 
         return toResponse(application);
     }

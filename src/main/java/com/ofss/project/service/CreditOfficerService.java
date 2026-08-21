@@ -1,26 +1,25 @@
 package com.ofss.project.service;
 
-import com.ofss.project.dto.request.ApplicationRejectRequest;
-import com.ofss.project.dto.request.RiskAssessment;
-import com.ofss.project.dto.response.ApplicationRiskResponse;
-import com.ofss.project.dto.response.ApplicationDocumentResponse;
-import com.ofss.project.dto.response.CardIssuanceResponse;
-import com.ofss.project.entity.ApplicationStatusHistory;
-import com.ofss.project.entity.ApplicationDocument;
-import com.ofss.project.entity.CreditCardApplication;
-import com.ofss.project.entity.User;
-import com.ofss.project.enums.ApplicationStatus;
-import com.ofss.project.repository.ApplicationStatusHistoryRepository;
-import com.ofss.project.repository.CreditCardApplicationRepository;
-import com.ofss.project.repository.UserRepository;
-import com.ofss.project.repository.ApplicationDocumentRepository;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.ofss.project.dto.request.RiskAssessment;
+import com.ofss.project.dto.response.ApplicationDocumentResponse;
+import com.ofss.project.dto.response.ApplicationRiskResponse;
+import com.ofss.project.dto.response.CardIssuanceResponse;
+import com.ofss.project.entity.ApplicationDocument;
+import com.ofss.project.entity.ApplicationStatusHistory;
+import com.ofss.project.entity.CreditCardApplication;
+import com.ofss.project.entity.User;
+import com.ofss.project.enums.ApplicationStatus;
+import com.ofss.project.repository.ApplicationDocumentRepository;
+import com.ofss.project.repository.ApplicationStatusHistoryRepository;
+import com.ofss.project.repository.CreditCardApplicationRepository;
+import com.ofss.project.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,7 @@ public class CreditOfficerService {
         private final CreditCardService creditCardService;
         private final UserRepository userRepository;
         private final ApplicationStatusHistoryRepository statusHistoryRepository;
+        private final NotificationService notificationService;
 
         public List<ApplicationRiskResponse> getAllApplications() {
 
@@ -85,6 +85,8 @@ public class CreditOfficerService {
                                 ApplicationStatus.APPROVED);
 
                 applicationRepository.save(application);
+                
+                notificationService.createApplicationApprovedNotification(application);
 
                 return creditCardService.issueCard(
                                 application,
@@ -123,6 +125,8 @@ public class CreditOfficerService {
                                 .build();
 
                 statusHistoryRepository.save(history);
+                
+                notificationService.createApplicationRejectedNotification(application,remark);
         }
 
         private ApplicationRiskResponse toRiskResponse(
